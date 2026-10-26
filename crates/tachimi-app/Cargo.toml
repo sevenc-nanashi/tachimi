@@ -1,0 +1,7 @@
+[package]
+name = "tachimi-app"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+usage-rs = { version = "7", features = ["completions"] }

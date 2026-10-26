@@ -1,0 +1,5 @@
+dist/
+web-dist/
+tmp/
+screenshots/
+node_modules/
