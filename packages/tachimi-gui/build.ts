@@ -5,7 +5,10 @@ await Bun.build({
   entrypoints: ["./src/app.tsx"],
   compile: {
     outfile: "dist/tachimi-gui",
-    windows: { hideConsole: true, icon: "./icon.ico" },
+    windows: {
+      hideConsole: true,
+      icon: fileURLToPath(new URL("../tachimi-common/icon.ico", import.meta.url)),
+    },
   },
   plugins: [
     createSolidPlugin(),

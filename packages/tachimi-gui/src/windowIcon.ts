@@ -1,5 +1,5 @@
 import { dlopen, JSCallback, ptr } from "bun:ffi";
-import iconPath from "../icon.png" with { type: "file" };
+import iconPath from "../../tachimi-common/icon.png" with { type: "file" };
 
 export async function setWindowIcon() {
   if (process.platform !== "win32") return;
