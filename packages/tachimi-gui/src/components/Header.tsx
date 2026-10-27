@@ -1,8 +1,15 @@
+import { ClipboardCopy } from "lucide-static";
+import { Show } from "solid-js";
 import * as theme from "~/theme.ts";
 import AboutDialog from "./AboutDialog.tsx";
 import DownloadDialog from "./DownloadDialog.tsx";
+import IconButton from "./IconButton.tsx";
 
-export default function Header(props: { onDownloaded: () => void }) {
+export default function Header(props: {
+  onDownloaded: () => void;
+  hasParentWorks: boolean;
+  onCopyParentWorkIds: () => void;
+}) {
   return (
     <div
       style={{
@@ -17,7 +24,19 @@ export default function Header(props: { onDownloaded: () => void }) {
     >
       <AboutDialog />
       <div style={{ flexGrow: 1 }} />
-      <DownloadDialog onDownloaded={props.onDownloaded} />
+      <Show
+        when={props.hasParentWorks}
+        fallback={<DownloadDialog onDownloaded={props.onDownloaded} />}
+      >
+        <IconButton
+          level="primary"
+          size="small"
+          icon={ClipboardCopy}
+          onClick={props.onCopyParentWorkIds}
+        >
+          親作品IDをコピー
+        </IconButton>
+      </Show>
     </div>
   );
 }

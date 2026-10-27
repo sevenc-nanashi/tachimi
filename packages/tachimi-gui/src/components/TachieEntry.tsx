@@ -1,14 +1,19 @@
-import { FolderOpen } from "lucide-static";
+import { ClipboardCheck, ClipboardX, FolderOpen } from "lucide-static";
 import type { TachieInfo } from "~/cli.ts";
 import * as theme from "~/theme.ts";
 import * as actions from "~/actions.ts";
 import IconButton from "./IconButton.tsx";
 import UpdateDialog from "./UpdateDialog.tsx";
 import type { UpdateStatus } from "./TachieList.tsx";
+import Link from "./Link.tsx";
+import { Show } from "solid-js";
 
 export default function TachieEntry(props: {
   tachie: TachieInfo;
   updateStatus: UpdateStatus | undefined;
+  isParentWorkIncluded: boolean;
+  onIncludeParentWork: () => void;
+  onExcludeParentWork: () => void;
   onDownloaded: () => void;
 }) {
   return (
@@ -63,31 +68,28 @@ export default function TachieEntry(props: {
         >
           {props.tachie.user}
         </text>
+
+        <Show when={props.tachie.parentWork}>
+          {(parentWork) => (
+            <div
+              style={{
+                fontSize: theme.fontSize.sm,
+                display: "flex",
+              }}
+            >
+              親作品先：
+              <Link url={parentWork().url}>{parentWork().url}</Link>
+            </div>
+          )}
+        </Show>
         <div
           style={{
-            color: theme.accent,
             fontSize: theme.fontSize.sm,
-            textDecoration: "underline",
             display: "flex",
-            focusVisible: { outlineWidth: 2, outlineColor: theme.accent },
           }}
         >
-          <text
-            role="link"
-            tabIndex={0}
-            onClick={() => actions.openUrl(props.tachie.url)}
-            onKeyDown={(event) => {
-              if (event.key === "enter" && !event.isHeld) {
-                actions.openUrl(props.tachie.url);
-              }
-            }}
-            style={{
-              display: "inline",
-              cursor: "pointer",
-            }}
-          >
-            {props.tachie.url}
-          </text>
+          TACHIE：
+          <Link url={props.tachie.url}>{props.tachie.url}</Link>
         </div>
         <div
           style={{ alignSelf: "start", display: "flex", gap: theme.spacing.sm }}
@@ -100,6 +102,29 @@ export default function TachieEntry(props: {
           >
             フォルダを開く
           </IconButton>
+          <Show
+            when={props.isParentWorkIncluded}
+            fallback={
+              <IconButton
+                level="secondary"
+                size="small"
+                icon={ClipboardCheck}
+                disabled={!props.tachie.parentWork}
+                onClick={() => props.onIncludeParentWork()}
+              >
+                親作品対象に含める
+              </IconButton>
+            }
+          >
+            <IconButton
+              level="primary"
+              size="small"
+              icon={ClipboardX}
+              onClick={() => props.onExcludeParentWork()}
+            >
+              親作品対象から除外する
+            </IconButton>
+          </Show>
           <UpdateDialog
             tachie={props.tachie}
             updateStatus={props.updateStatus}

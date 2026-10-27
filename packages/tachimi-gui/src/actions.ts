@@ -55,3 +55,32 @@ export async function openUrl(url: string): Promise<void> {
     throw new Error(`URLを開けませんでした: ${stderr}`);
   }
 }
+
+export async function copyToClipboard(text: string): Promise<void> {
+  const command = {
+    win32: [
+      "powershell.exe",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "$ErrorActionPreference = 'Stop'; Set-Clipboard -Value $env:TACHIMI_CLIPBOARD_TEXT",
+    ],
+    darwin: ["pbcopy"],
+    linux: ["xclip", "-selection", "clipboard"],
+  }[process.platform as string];
+  if (!command) {
+    throw new Error(`Unsupported platform: ${process.platform}`);
+  }
+  const result = Bun.spawn(command, {
+    env: { ...process.env, TACHIMI_CLIPBOARD_TEXT: text },
+    stdout: "ignore",
+    stderr: "pipe",
+  });
+  const [exitCode, stderr] = await Promise.all([
+    result.exited,
+    new Response(result.stderr).text(),
+  ]);
+  if (exitCode !== 0) {
+    throw new Error(`クリップボードにコピーできませんでした: ${stderr}`);
+  }
+}

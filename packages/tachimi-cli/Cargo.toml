@@ -21,3 +21,4 @@ ureq = "3.5.0"
 tempfile = "3.27.0"
 ring = "0.17.14"
 zip = { version = "9.0.0", default-features = false, features = ["deflate-flate2-zlib-rs"] }
+lazy-regex = "3.6.2"

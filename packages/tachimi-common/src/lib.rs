@@ -23,9 +23,15 @@ pub struct TachieInfo {
     pub name: String,
     pub user: String,
     pub sha: String,
-    pub parent_work_url: Option<String>,
+    pub parent_work: Option<ParentWork>,
     pub idx: usize,
     pub thumbnail: std::path::PathBuf,
+}
+
+#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
+pub struct ParentWork {
+    pub url: String,
+    pub id: String,
 }
 
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]

@@ -32,12 +32,35 @@ export type TachieInfo = {
   user: string;
   sha: string;
   idx: number;
+  parentWork: { url: string; id: string } | null;
   thumbnail: string;
 };
 
 export async function listTachie(): Promise<TachieInfo[]> {
+  type CliTachieInfo = {
+    dir: string;
+    key: string;
+    url: string;
+    name: string;
+    user: string;
+    sha: string;
+    idx: number;
+    parent_work: { url: string; id: string } | null;
+    thumbnail: string;
+  };
   const output = await callCli(["list"]);
-  return JSON.parse(output);
+  const tachies: CliTachieInfo[] = JSON.parse(output);
+  return tachies.map((t) => ({
+    dir: t.dir,
+    key: t.key,
+    url: t.url,
+    name: t.name,
+    user: t.user,
+    sha: t.sha,
+    idx: t.idx,
+    parentWork: t.parent_work,
+    thumbnail: t.thumbnail,
+  }));
 }
 
 export function tachieKey(url: string): string {

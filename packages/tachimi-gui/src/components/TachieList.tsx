@@ -16,6 +16,8 @@ export type UpdateStatus = "checking" | "available" | "current" | "error";
 export default function TachieList(props: {
   tachies: Resource<cli.TachieInfo[]>;
   onDownloaded: () => void;
+  parentWorkKeys: ReadonlySet<string>;
+  onParentWorkIncludedChange: (key: string, included: boolean) => void;
 }) {
   const tachies = props.tachies;
   const [updates, setUpdates] = createSignal<Record<string, UpdateStatus>>({});
@@ -28,7 +30,8 @@ export default function TachieList(props: {
     });
     setUpdates(Object.fromEntries(items.map((item) => [item.key, "checking"])));
     const setStatus = (key: string, status: UpdateStatus) => {
-      if (!cancelled) setUpdates((previous) => ({ ...previous, [key]: status }));
+      if (!cancelled)
+        setUpdates((previous) => ({ ...previous, [key]: status }));
     };
     void (async () => {
       try {
@@ -44,7 +47,8 @@ export default function TachieList(props: {
       }
       for (const [index, item] of items.entries()) {
         if (cancelled) return;
-        if (index > 0) await new Promise((resolve) => setTimeout(resolve, 1000));
+        if (index > 0)
+          await new Promise((resolve) => setTimeout(resolve, 1000));
         if (cancelled) return;
         try {
           const result = await cli.fetchTachie(item.key);
@@ -91,6 +95,13 @@ export default function TachieList(props: {
                 tachie={tachie}
                 updateStatus={updates()[tachie.key]}
                 onDownloaded={props.onDownloaded}
+                isParentWorkIncluded={props.parentWorkKeys.has(tachie.key)}
+                onIncludeParentWork={() =>
+                  props.onParentWorkIncludedChange(tachie.key, true)
+                }
+                onExcludeParentWork={() =>
+                  props.onParentWorkIncludedChange(tachie.key, false)
+                }
               />
             )}
           </For>

@@ -1,4 +1,5 @@
-use tachimi_common::TachieInfo;
+use anyhow::Context;
+use tachimi_common::{ParentWork, TachieInfo};
 
 use usage_rs::Args;
 
@@ -51,6 +52,15 @@ fn read_tachie_dir(tachie_dir: &std::path::Path) -> anyhow::Result<TachieInfo> {
     let tachie_data: TachieData = serde_json::from_reader(data_file)
         .map_err(|e| anyhow::anyhow!("Failed to parse data file {:?}: {:?}", data_path, e))?;
     let thumbnail_path = root.join("thumbnail.png");
+    let parent_work = tachie_data
+        .parent_work_url
+        .map(|url| -> anyhow::Result<ParentWork> {
+            let id = lazy_regex::regex_find!(r"[a-z]{2}[0-9]+", &url)
+                .with_context(|| format!("Parent work ID not found in URL: {url}"))?
+                .to_owned();
+            Ok(ParentWork { url, id })
+        })
+        .transpose()?;
     Ok(TachieInfo {
         dir: tachie_dir.to_path_buf(),
         key: tachie_data.key,
@@ -58,7 +68,7 @@ fn read_tachie_dir(tachie_dir: &std::path::Path) -> anyhow::Result<TachieInfo> {
         name: tachie_data.name,
         user: tachie_data.user,
         sha: tachie_data.sha,
-        parent_work_url: tachie_data.parent_work_url,
+        parent_work,
         idx: tachie_data.idx,
         thumbnail: thumbnail_path,
     })
