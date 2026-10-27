@@ -1,5 +1,5 @@
 [package]
-name = "tachimi-app"
+name = "tachimi-cli"
 version.workspace = true
 edition.workspace = true
 

@@ -1,5 +1,5 @@
 [workspace]
-members = ["packages/tachimi-app", "packages/tachimi-core"]
+members = ["packages/tachimi-cli", "packages/tachimi-core"]
 resolver = "3"
 
 [workspace.package]
