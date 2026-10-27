@@ -1,6 +1,6 @@
 import { render } from "@gpuix/solid";
-import { Header } from "./components/Header.tsx";
-import * as theme from "~/theme.ts";
+import Header from "./components/Header.tsx";
+import TachieList from "./components/TachieList.tsx";
 
 function App() {
   return (
@@ -11,16 +11,7 @@ function App() {
       }}
     >
       <Header />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          gap: theme.spacing.sm,
-          padding: theme.spacing.md,
-        }}
-      >
-        Tachie list
-      </div>
+      <TachieList />
     </div>
   );
 }

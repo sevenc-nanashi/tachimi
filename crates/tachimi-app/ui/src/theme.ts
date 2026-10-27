@@ -24,6 +24,14 @@ export const logoBack = "#9fd0d4";
 export const radius = "12px";
 export const radiusSmall = "8px";
 
+export const fontSize = {
+  sm: 12,
+  md: 14,
+  lg: 16,
+  xl: 18,
+  xxl: 20,
+} as const;
+
 const spacingUnit = 4;
 export const spacing = {
   sm: spacingUnit * 2,
