@@ -1,0 +1,8 @@
+{
+  "name": "tachimi",
+  "version": "0.0.0",
+  "workspaces": [
+    "packages/tachimi-gui",
+    "packages/tachimi-server"
+  ]
+}
