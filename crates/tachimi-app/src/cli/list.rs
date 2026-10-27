@@ -5,6 +5,7 @@ pub struct List {}
 
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
 pub struct TachieInfo {
+    pub dir: std::path::PathBuf,
     pub url: String,
     pub name: String,
     pub user: String,
@@ -25,6 +26,12 @@ pub struct TachieData {
 }
 
 pub fn run(config: &crate::config::Config, _list: &List) -> anyhow::Result<()> {
+    let tachie_infos = list_tachies(config)?;
+    println!("{}", serde_json::to_string_pretty(&tachie_infos)?);
+    Ok(())
+}
+
+pub(super) fn list_tachies(config: &crate::config::Config) -> anyhow::Result<Vec<TachieInfo>> {
     let tachie_dir = &config.tachie_dir;
     if !tachie_dir.exists() {
         anyhow::bail!("Tachie directory does not exist: {:?}", tachie_dir);
@@ -41,8 +48,7 @@ pub fn run(config: &crate::config::Config, _list: &List) -> anyhow::Result<()> {
             }
         }
     }
-    println!("{}", serde_json::to_string_pretty(&tachie_infos)?);
-    Ok(())
+    Ok(tachie_infos)
 }
 
 #[hooq::hooq(anyhow)]
@@ -55,6 +61,7 @@ fn read_tachie_dir(tachie_dir: &std::path::Path) -> anyhow::Result<TachieInfo> {
         .map_err(|e| anyhow::anyhow!("Failed to parse data file {:?}: {:?}", data_path, e))?;
     let thumbnail_path = root.join("thumbnail.png");
     Ok(TachieInfo {
+        dir: tachie_dir.to_path_buf(),
         url: tachie_data.url,
         name: tachie_data.name,
         user: tachie_data.user,

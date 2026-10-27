@@ -1,5 +1,7 @@
 pub mod download;
+pub mod fetch;
 pub mod list;
+pub mod shallow_fetch;
 pub mod version;
 use usage_rs::{Cli, Subcommands};
 
@@ -15,4 +17,6 @@ pub enum Commands {
     Version(version::Version),
     List(list::List),
     Download(download::Download),
+    Fetch(fetch::Fetch),
+    ShallowFetch(shallow_fetch::ShallowFetch),
 }

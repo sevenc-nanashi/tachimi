@@ -1,3 +1,4 @@
+mod api;
 mod cli;
 mod config;
 
@@ -52,5 +53,7 @@ fn main() -> anyhow::Result<()> {
         cli::Commands::Version(version) => cli::version::run(&config, &version),
         cli::Commands::List(list) => cli::list::run(&config, &list),
         cli::Commands::Download(download) => cli::download::run(&config, &download),
+        cli::Commands::Fetch(fetch) => cli::fetch::run(&config, &fetch),
+        cli::Commands::ShallowFetch(fetch) => cli::shallow_fetch::run(&config, &fetch),
     }
 }
