@@ -543,6 +543,7 @@ dependencies = [
  "anyhow",
  "dirs",
  "hooq",
+ "ring",
  "serde",
  "serde_json",
  "tachimi-core",

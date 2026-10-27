@@ -1,21 +1,62 @@
 import * as theme from "~/theme.ts";
 import {
   type Resource,
+  createEffect,
   createSignal,
   For,
   Match,
-  Show,
+  onCleanup,
   Switch,
 } from "solid-js";
 import * as cli from "~/cli.ts";
-import * as actions from "~/actions.ts";
 import TachieEntry from "./TachieEntry.tsx";
+
+export type UpdateStatus = "checking" | "available" | "current" | "error";
 
 export default function TachieList(props: {
   tachies: Resource<cli.TachieInfo[]>;
+  onDownloaded: () => void;
 }) {
   const tachies = props.tachies;
-  const [openError, setOpenError] = createSignal<string>();
+  const [updates, setUpdates] = createSignal<Record<string, UpdateStatus>>({});
+  createEffect(() => {
+    const items = tachies();
+    if (!items) return;
+    let cancelled = false;
+    onCleanup(() => {
+      cancelled = true;
+    });
+    setUpdates(Object.fromEntries(items.map((item) => [item.key, "checking"])));
+    const setStatus = (key: string, status: UpdateStatus) => {
+      if (!cancelled) setUpdates((previous) => ({ ...previous, [key]: status }));
+    };
+    void (async () => {
+      try {
+        const shallow = await cli.shallowFetch();
+        for (const item of items) {
+          const revision = shallow.revisions[item.key];
+          if (revision != null && revision > item.idx) {
+            setStatus(item.key, "available");
+          }
+        }
+      } catch {
+        // Individual checks still discover updates if the shallow request fails.
+      }
+      for (const [index, item] of items.entries()) {
+        if (cancelled) return;
+        if (index > 0) await new Promise((resolve) => setTimeout(resolve, 1000));
+        if (cancelled) return;
+        try {
+          const result = await cli.fetchTachie(item.key);
+          const revision = result.revisions[item.key];
+          if (revision == null) throw new Error("更新情報がありません");
+          setStatus(item.key, revision > item.idx ? "available" : "current");
+        } catch {
+          setStatus(item.key, "error");
+        }
+      }
+    })();
+  });
   return (
     <div
       style={{
@@ -29,9 +70,6 @@ export default function TachieList(props: {
         padding: theme.spacing.md,
       }}
     >
-      <Show when={openError()}>
-        <text style={{ color: theme.danger }}>{openError()}</text>
-      </Show>
       <Switch>
         <Match when={tachies.loading}>
           <text style={{ color: theme.muted }}>立ち絵を読み込み中...</text>
@@ -48,7 +86,13 @@ export default function TachieList(props: {
               <text style={{ color: theme.muted }}>立ち絵はまだありません</text>
             }
           >
-            {(tachie) => <TachieEntry tachie={tachie} />}
+            {(tachie) => (
+              <TachieEntry
+                tachie={tachie}
+                updateStatus={updates()[tachie.key]}
+                onDownloaded={props.onDownloaded}
+              />
+            )}
           </For>
         </Match>
       </Switch>

@@ -31,6 +31,7 @@ export type TachieInfo = {
   name: string;
   user: string;
   sha: string;
+  idx: number;
   thumbnail: string;
 };
 
@@ -39,7 +40,7 @@ export async function listTachie(): Promise<TachieInfo[]> {
   return JSON.parse(output);
 }
 
-function tachieKey(url: string): string {
+export function tachieKey(url: string): string {
   const pattern = new URLPattern({
     protocol: "https",
     hostname: "tachie.net",
@@ -67,7 +68,21 @@ export async function getTachieInfo(url: string): Promise<TachiePreview> {
 }
 
 export async function downloadTachie(url: string): Promise<void> {
-  await callCli(["download", "--key", tachieKey(url)]);
+  await downloadKey(tachieKey(url));
+}
+
+export async function downloadKey(key: string): Promise<void> {
+  await callCli(["download", "--key", key]);
+}
+
+type Updates = { revisions: Record<string, number | null> };
+
+export async function shallowFetch(): Promise<Updates> {
+  return JSON.parse(await callCli(["shallow-fetch"]));
+}
+
+export async function fetchTachie(key: string): Promise<Updates> {
+  return JSON.parse(await callCli(["fetch", "--key", key]));
 }
 
 export type VersionInfo = {

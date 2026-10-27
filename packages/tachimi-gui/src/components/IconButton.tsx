@@ -40,7 +40,6 @@ export default function IconButton(props: {
               backgroundColor: theme.accent,
               color: theme.onAccent,
               borderRadius: 128,
-              cursor: "pointer",
               hover: {
                 backgroundColor: theme.accentStrong,
               },
@@ -55,11 +54,11 @@ export default function IconButton(props: {
                 backgroundColor: theme.fill,
               },
             }),
+
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        cursor: "pointer",
         padding: padding[props.size],
         paddingLeft: props.children
           ? textPaddings[props.size]
@@ -70,6 +69,15 @@ export default function IconButton(props: {
         fontSize: fontSizes[props.size],
         gap: props.children ? padding[props.size] : 0,
         opacity: props.disabled ? 0.5 : 1,
+
+        ...(props.disabled
+          ? {
+              cursor: "not-allowed",
+              hover: {},
+            }
+          : {
+              cursor: "pointer",
+            }),
       }}
 
       onClick={props.onClick}

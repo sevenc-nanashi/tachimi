@@ -3,8 +3,14 @@ import type { TachieInfo } from "~/cli.ts";
 import * as theme from "~/theme.ts";
 import * as actions from "~/actions.ts";
 import IconButton from "./IconButton.tsx";
+import UpdateDialog from "./UpdateDialog.tsx";
+import type { UpdateStatus } from "./TachieList.tsx";
 
-export default function TachieEntry(props: { tachie: TachieInfo }) {
+export default function TachieEntry(props: {
+  tachie: TachieInfo;
+  updateStatus: UpdateStatus | undefined;
+  onDownloaded: () => void;
+}) {
   return (
     <div
       style={{
@@ -58,25 +64,34 @@ export default function TachieEntry(props: { tachie: TachieInfo }) {
           {props.tachie.user}
         </text>
         <div
-          role="link"
-          tabIndex={0}
-          onClick={() => actions.openUrl(props.tachie.url)}
-          onKeyDown={(event) => {
-            if (event.key === "enter" && !event.isHeld) {
-              actions.openUrl(props.tachie.url);
-            }
-          }}
           style={{
             color: theme.accent,
             fontSize: theme.fontSize.sm,
-            cursor: "pointer",
             textDecoration: "underline",
+            display: "flex",
             focusVisible: { outlineWidth: 2, outlineColor: theme.accent },
           }}
         >
-          <text>{props.tachie.url}</text>
+          <text
+            role="link"
+            tabIndex={0}
+            onClick={() => actions.openUrl(props.tachie.url)}
+            onKeyDown={(event) => {
+              if (event.key === "enter" && !event.isHeld) {
+                actions.openUrl(props.tachie.url);
+              }
+            }}
+            style={{
+              display: "inline",
+              cursor: "pointer",
+            }}
+          >
+            {props.tachie.url}
+          </text>
         </div>
-        <div style={{ alignSelf: "start" }}>
+        <div
+          style={{ alignSelf: "start", display: "flex", gap: theme.spacing.sm }}
+        >
           <IconButton
             level="secondary"
             size="small"
@@ -85,6 +100,11 @@ export default function TachieEntry(props: { tachie: TachieInfo }) {
           >
             フォルダを開く
           </IconButton>
+          <UpdateDialog
+            tachie={props.tachie}
+            updateStatus={props.updateStatus}
+            onDownloaded={props.onDownloaded}
+          />
         </div>
       </div>
     </div>

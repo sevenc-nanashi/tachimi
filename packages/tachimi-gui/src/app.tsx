@@ -15,7 +15,7 @@ function App() {
       }}
     >
       <Header onDownloaded={() => void refetch()} />
-      <TachieList tachies={tachies} />
+      <TachieList tachies={tachies} onDownloaded={() => void refetch()} />
     </div>
   );
 }
