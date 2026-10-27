@@ -8,6 +8,7 @@ export default defineConfig({
       srcDir: "content",
       outDir: "dist",
       ogImage: true,
+      docs: false,
       ssg: {
         siteName: "Tachimi",
         theme: defineTheme({
