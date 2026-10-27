@@ -2,18 +2,28 @@ mod api;
 mod cli;
 mod config;
 
-fn sync_data() -> anyhow::Result<()> {
+fn sync_data() -> anyhow::Result<std::fs::File> {
     let data_path = tachimi_common::data_path();
     tracing::info!("Data path: {:?}", data_path);
-    std::fs::create_dir_all(data_path.parent().expect("Failed to get parent directory"))?;
+    let data_dir = data_path.parent().expect("Failed to get parent directory");
+    std::fs::create_dir_all(data_dir)?;
+    let data_lock = std::fs::File::options()
+        .read(true)
+        .write(true)
+        .create(true)
+        .truncate(false)
+        .open(data_dir.join("data.lock"))?;
+    data_lock.lock()?;
+    let mut data_file = tempfile::NamedTempFile::new_in(data_dir)?;
     serde_json::to_writer_pretty(
-        std::fs::File::create(data_path).expect("Failed to create data file"),
+        data_file.as_file_mut(),
         &tachimi_common::RootData {
             cli_path: std::env::current_exe().expect("Failed to get current executable path"),
         },
     )?;
+    data_file.persist(data_path)?;
 
-    Ok(())
+    Ok(data_lock)
 }
 
 fn run_gui() -> anyhow::Result<()> {
@@ -43,7 +53,7 @@ fn main() -> anyhow::Result<()> {
         )
         .init();
 
-    sync_data()?;
+    let data_lock = sync_data()?;
 
     if std::env::args().len() == 1 {
         // コマンド未指定時はGUIを起動する
@@ -54,6 +64,7 @@ fn main() -> anyhow::Result<()> {
 
     let cli = cli::Greet::parse();
     let config = config::load_config()?;
+    drop(data_lock);
     match cli.command {
         cli::Commands::Version(version) => cli::version::run(&config, &version),
         cli::Commands::List(list) => cli::list::run(&config, &list),

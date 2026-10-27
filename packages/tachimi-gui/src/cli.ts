@@ -1,7 +1,8 @@
+import path from "node:path";
 function getCliPath(): string {
   const cliPath = Bun.env.TACHIMI_CLI_PATH;
   if (!cliPath) {
-    throw new Error("TACHIMI_CLI_PATH is not set");
+    return path.join(path.dirname(process.execPath), "tachimi.exe");
   }
   return cliPath;
 }
@@ -9,6 +10,7 @@ function getCliPath(): string {
 async function callCli(args: string[]): Promise<string> {
   const cliPath = getCliPath();
   const result = Bun.spawn([cliPath, ...args], {
+    windowsHide: true,
     env: { ...Bun.env, TACHIMI_LOG: "off" },
     stdout: "pipe",
     stderr: "pipe",

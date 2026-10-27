@@ -4,11 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun --hot app.tsx",
-    "build": "bun build --compile app.tsx --outfile dist/todo",
-    "web:dev": "bun web.ts",
-    "screenshot": "bun screenshot.ts",
-    "test": "vitest run",
+    "dev": "bun --hot src/app.tsx",
+    "build": "bun build.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

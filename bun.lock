@@ -4,6 +4,10 @@
   "workspaces": {
     "": {
       "name": "tachimi",
+      "devDependencies": {
+        "@types/bun": "^1.4.4",
+        "typescript": "^7.0.2",
+      },
     },
     "packages/tachimi-docs": {
       "name": "tachimi-docs",

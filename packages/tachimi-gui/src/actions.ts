@@ -14,6 +14,7 @@ export async function openFolder(dir: string): Promise<void> {
     throw new Error(`Unsupported platform: ${process.platform}`);
   }
   const result = Bun.spawn(command, {
+    windowsHide: true,
     env: { ...process.env, TACHIMI_OPEN_DIR: dir },
     stdout: "ignore",
     stderr: "pipe",
@@ -43,6 +44,7 @@ export async function openUrl(url: string): Promise<void> {
     throw new Error(`Unsupported platform: ${process.platform}`);
   }
   const result = Bun.spawn(command, {
+    windowsHide: true,
     env: { ...process.env, TACHIMI_OPEN_URL: url },
     stdout: "ignore",
     stderr: "pipe",
@@ -72,6 +74,7 @@ export async function copyToClipboard(text: string): Promise<void> {
     throw new Error(`Unsupported platform: ${process.platform}`);
   }
   const result = Bun.spawn(command, {
+    windowsHide: true,
     env: { ...process.env, TACHIMI_CLIPBOARD_TEXT: text },
     stdout: "ignore",
     stderr: "pipe",
