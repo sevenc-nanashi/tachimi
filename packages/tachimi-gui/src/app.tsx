@@ -4,6 +4,7 @@ import * as cli from "~/cli.ts";
 import * as actions from "~/actions.ts";
 import Header from "./components/Header.tsx";
 import TachieList from "./components/TachieList.tsx";
+import { setWindowIcon } from "./windowIcon.ts";
 
 function App() {
   const [tachies, { refetch }] = createResource(cli.listTachie);
@@ -54,3 +55,4 @@ function App() {
 }
 
 render(() => <App />, { title: "Tachimi", width: 800, height: 600 });
+await setWindowIcon();
