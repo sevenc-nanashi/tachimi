@@ -537,7 +537,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tachimi-app"
+name = "tachimi-cli"
 version = "0.1.0"
 dependencies = [
  "anyhow",

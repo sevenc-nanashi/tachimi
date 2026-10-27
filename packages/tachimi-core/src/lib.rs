@@ -1,5 +1,5 @@
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
-pub struct DirList {
+pub struct RootData {
     pub cli_path: std::path::PathBuf,
 }
 
@@ -14,3 +14,24 @@ pub fn data_path() -> std::path::PathBuf {
     data_path.push("data.json");
     data_path
 }
+
+#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
+pub struct TachieInfo {
+    pub dir: std::path::PathBuf,
+    pub key: String,
+    pub url: String,
+    pub name: String,
+    pub user: String,
+    pub sha: String,
+    pub parent_work_url: Option<String>,
+    pub idx: usize,
+    pub thumbnail: std::path::PathBuf,
+}
+
+#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
+pub struct VersionInfo {
+    pub version: String,
+}
+
+#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
+pub struct DownloadInfo {}

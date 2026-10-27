@@ -1,3 +1,5 @@
+use tachimi_core::DownloadInfo;
+
 use anyhow::Context;
 use std::io::Read;
 use usage_rs::Args;
@@ -7,9 +9,6 @@ pub struct Download {
     #[usage(long = "key")]
     pub key: String,
 }
-
-#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
-pub struct DownloadInfo {}
 
 pub fn run(config: &crate::config::Config, args: &Download) -> anyhow::Result<()> {
     anyhow::ensure!(

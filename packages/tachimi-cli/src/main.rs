@@ -8,7 +8,7 @@ fn sync_data() -> anyhow::Result<()> {
     std::fs::create_dir_all(data_path.parent().expect("Failed to get parent directory"))?;
     serde_json::to_writer_pretty(
         std::fs::File::create(data_path).expect("Failed to create data file"),
-        &tachimi_core::DirList {
+        &tachimi_core::RootData {
             cli_path: std::env::current_exe().expect("Failed to get current executable path"),
         },
     )?;

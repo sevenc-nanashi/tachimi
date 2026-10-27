@@ -1,20 +1,9 @@
+use tachimi_core::TachieInfo;
+
 use usage_rs::Args;
 
 #[derive(Args)]
 pub struct List {}
-
-#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
-pub struct TachieInfo {
-    pub dir: std::path::PathBuf,
-    pub key: String,
-    pub url: String,
-    pub name: String,
-    pub user: String,
-    pub sha: String,
-    pub parent_work_url: Option<String>,
-    pub idx: usize,
-    pub thumbnail: std::path::PathBuf,
-}
 
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
 pub struct TachieData {
