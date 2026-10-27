@@ -1,0 +1,75 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "41d79e68-5ef8-44f7-93af-de88f88d1c46",
+  "prevId": "5ff7b6ad-a82f-4359-8be4-3f9d6e6ed555",
+  "tables": {
+    "tachie_revisions": {
+      "name": "tachie_revisions",
+      "columns": {
+        "tachie_id": {
+          "name": "tachie_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sha": {
+          "name": "sha",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "idx": {
+          "name": "idx",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(datetime('now'))"
+        }
+      },
+      "indexes": {
+        "tachie_revisions_tachie_id_sha_unique": {
+          "name": "tachie_revisions_tachie_id_sha_unique",
+          "columns": [
+            "tachie_id",
+            "sha"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "tachie_revisions_tachie_id_sha_idx_pk": {
+          "columns": [
+            "tachie_id",
+            "sha",
+            "idx"
+          ],
+          "name": "tachie_revisions_tachie_id_sha_idx_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}

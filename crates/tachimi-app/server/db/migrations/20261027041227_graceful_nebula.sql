@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `tachie_revisions_tachie_id_sha_unique` ON `tachie_revisions` (`tachie_id`,`sha`);

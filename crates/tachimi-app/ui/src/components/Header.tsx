@@ -37,7 +37,9 @@ export default function Header() {
         >{`v${version()?.version}`}</text>
       </Show>
       <div style={{ flexGrow: 1 }} />
-      <IconButton level="primary" icon={Plus} size="small" />
+      <IconButton level="primary" icon={Plus} size="small">
+        立ち絵をダウンロード
+      </IconButton>
     </div>
   );
 }

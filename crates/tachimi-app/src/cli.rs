@@ -1,4 +1,5 @@
 pub mod list;
+pub mod download;
 pub mod version;
 use usage_rs::{Cli, Subcommands};
 

@@ -1,3 +1,4 @@
+import { JSX } from "solid-js";
 import * as theme from "~/theme.ts";
 
 const sizes = {
@@ -6,15 +7,26 @@ const sizes = {
   large: 40,
 };
 const padding = {
-  small: 8,
+  small: 4,
   medium: 8,
   large: 12,
+};
+const textPaddings = {
+  small: 8,
+  medium: 16,
+  large: 24,
+};
+const fontSizes = {
+  small: 12,
+  medium: 14,
+  large: 16,
 };
 
 export default function IconButton(props: {
   level: "primary" | "secondary";
   size: "small" | "medium" | "large";
   icon: string;
+  children?: JSX.Element;
   onClick?: () => void;
 }) {
   return (
@@ -36,11 +48,18 @@ export default function IconButton(props: {
               borderWidth: 1,
               borderRadius: 128,
             }),
-        display: "grid",
+        display: "flex",
+        flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        width: sizes[props.size],
-        height: sizes[props.size],
+        padding: padding[props.size],
+        paddingLeft: props.children
+          ? textPaddings[props.size]
+          : padding[props.size],
+        paddingRight: props.children
+          ? textPaddings[props.size] * 1.5
+          : padding[props.size],
+        fontSize: fontSizes[props.size],
       }}
 
       onClick={props.onClick}
@@ -48,10 +67,11 @@ export default function IconButton(props: {
       <svg
         source={props.icon}
         style={{
-          width: sizes[props.size] - padding[props.size],
-          height: sizes[props.size] - padding[props.size],
+          width: sizes[props.size] - padding[props.size] * 2,
+          height: sizes[props.size] - padding[props.size] * 2,
         }}
       />
+      {props.children}
     </div>
   );
 }

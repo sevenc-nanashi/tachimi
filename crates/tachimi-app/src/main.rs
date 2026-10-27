@@ -1,5 +1,6 @@
 mod cli;
 mod config;
+mod tachie_net;
 
 fn sync_data() -> anyhow::Result<()> {
     let data_path = tachimi_core::data_path();
