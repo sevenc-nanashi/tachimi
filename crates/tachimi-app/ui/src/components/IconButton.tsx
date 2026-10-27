@@ -1,4 +1,5 @@
 import { JSX } from "solid-js";
+import { Button } from "@gpuix/solid";
 import * as theme from "~/theme.ts";
 
 const sizes = {
@@ -30,12 +31,12 @@ export default function IconButton(props: {
   onClick?: () => void;
 }) {
   return (
-    <div
+    <Button
       style={{
         ...(props.level === "primary"
           ? {
               backgroundColor: theme.accent,
-              color: theme.bg,
+              color: theme.onAccent,
               borderRadius: 128,
               cursor: "pointer",
               hover: {
@@ -44,14 +45,19 @@ export default function IconButton(props: {
             }
           : {
               backgroundColor: theme.bg,
-              borderColor: theme.line,
+              borderColor: theme.lineStrong,
+              color: theme.text,
               borderWidth: 1,
               borderRadius: 128,
+              hover: {
+                backgroundColor: theme.fill,
+              },
             }),
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
+        cursor: "pointer",
         padding: padding[props.size],
         paddingLeft: props.children
           ? textPaddings[props.size]
@@ -60,6 +66,7 @@ export default function IconButton(props: {
           ? textPaddings[props.size] * 1.5
           : padding[props.size],
         fontSize: fontSizes[props.size],
+        gap: props.children ? padding[props.size] : 0,
       }}
 
       onClick={props.onClick}
@@ -67,11 +74,12 @@ export default function IconButton(props: {
       <svg
         source={props.icon}
         style={{
+          color: props.level === "primary" ? theme.onAccent : theme.text,
           width: sizes[props.size] - padding[props.size] * 2,
           height: sizes[props.size] - padding[props.size] * 2,
         }}
       />
       {props.children}
-    </div>
+    </Button>
   );
 }
