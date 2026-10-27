@@ -8,7 +8,10 @@ pub struct Fetch {
 }
 
 pub fn run(_config: &crate::config::Config, args: &Fetch) -> anyhow::Result<()> {
-    let agent = ureq::Agent::new_with_defaults();
+    let agent: ureq::Agent = ureq::Agent::config_builder()
+        .timeout_global(Some(std::time::Duration::from_secs(10)))
+        .build()
+        .into();
     let info = crate::api::fetch_info(&agent, &args.key)
         .with_context(|| format!("Failed to fetch updates for {}", args.key))?;
     let updates = tachimi_common::ShallowUpdatesApiResponse {

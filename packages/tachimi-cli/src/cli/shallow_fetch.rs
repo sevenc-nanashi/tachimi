@@ -11,13 +11,18 @@ pub fn run(config: &crate::config::Config, _args: &ShallowFetch) -> anyhow::Resu
             revisions: std::collections::BTreeMap::new(),
         }
     } else {
-        let mut response = ureq::get(format!(
-            "{}/api/shallow-updates",
-            crate::api::api_base().trim_end_matches('/')
-        ))
-        .query("keys", keys.join(","))
-        .call()
-        .context("Failed to fetch tachie updates")?;
+        let agent: ureq::Agent = ureq::Agent::config_builder()
+            .timeout_global(Some(std::time::Duration::from_secs(10)))
+            .build()
+            .into();
+        let mut response = agent
+            .get(format!(
+                "{}/api/shallow-updates",
+                crate::api::api_base().trim_end_matches('/')
+            ))
+            .query("keys", keys.join(","))
+            .call()
+            .context("Failed to fetch tachie updates")?;
         serde_json::from_reader(response.body_mut().as_reader())
             .context("Failed to parse tachie updates")?
     };
