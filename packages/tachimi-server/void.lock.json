@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "source": {},
+  "resolved": {
+    "account_id": "39adc12b9d9de87d99c29e149701bbe1",
+    "d1_databases": [
+      {
+        "binding": "DB",
+        "database_name": "tachimi-server-db",
+        "database_id": "07278bf8-e9a2-4f6f-921e-929e11bb5124",
+        "migrations_dir": "./db/migrations"
+      }
+    ],
+    "name": "tachimi-server"
+  },
+  "text": "{\n  \"account_id\": \"39adc12b9d9de87d99c29e149701bbe1\",\n  \"d1_databases\": [\n    {\n      \"binding\": \"DB\",\n      \"database_name\": \"tachimi-server-db\",\n      \"database_id\": \"07278bf8-e9a2-4f6f-921e-929e11bb5124\",\n      \"migrations_dir\": \"./db/migrations\"\n    }\n  ],\n  \"name\": \"tachimi-server\"\n}\n"
+}
