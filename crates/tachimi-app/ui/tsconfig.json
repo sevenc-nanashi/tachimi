@@ -7,6 +7,10 @@
     "jsxImportSource": "@gpuix/solid",
     "strict": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   }
 }
