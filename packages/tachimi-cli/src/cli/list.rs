@@ -1,4 +1,4 @@
-use tachimi_core::TachieInfo;
+use tachimi_common::TachieInfo;
 
 use usage_rs::Args;
 

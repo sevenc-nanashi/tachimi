@@ -64,7 +64,21 @@ export type TachiePreview = {
 };
 
 export async function getTachieInfo(url: string): Promise<TachiePreview> {
-  return JSON.parse(await callCli(["info", "--key", tachieKey(url)]));
+  type CliTachiePreview = {
+    title: string;
+    user: string;
+    thumbnail: string;
+    approx_size: number;
+  };
+  const preview: CliTachiePreview = JSON.parse(
+    await callCli(["info", "--key", tachieKey(url)]),
+  );
+  return {
+    title: preview.title,
+    user: preview.user,
+    thumbnail: preview.thumbnail,
+    approxSize: preview.approx_size,
+  };
 }
 
 export async function downloadTachie(url: string): Promise<void> {

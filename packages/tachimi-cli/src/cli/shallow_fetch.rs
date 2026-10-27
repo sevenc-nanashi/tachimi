@@ -7,7 +7,7 @@ pub struct ShallowFetch {}
 pub fn run(config: &crate::config::Config, _args: &ShallowFetch) -> anyhow::Result<()> {
     let keys = installed_keys(config)?;
     let updates = if keys.is_empty() {
-        crate::api::ShallowUpdatesApiResponse {
+        tachimi_common::ShallowUpdatesApiResponse {
             revisions: std::collections::BTreeMap::new(),
         }
     } else {

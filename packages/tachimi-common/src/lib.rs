@@ -35,3 +35,21 @@ pub struct VersionInfo {
 
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
 pub struct DownloadInfo {}
+
+#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
+pub struct TachieApiResponse {
+    pub title: String,
+    pub user: String,
+    pub sha: String,
+    pub parent_work_url: Option<String>,
+    pub thumbnail: String,
+    pub approx_size: f64,
+    pub date: String,
+    pub idx: usize,
+    pub download: String,
+}
+
+#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
+pub struct ShallowUpdatesApiResponse {
+    pub revisions: std::collections::BTreeMap<String, Option<usize>>,
+}

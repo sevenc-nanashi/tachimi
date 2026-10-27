@@ -123,7 +123,12 @@ export const GET = defineHandler.withValidator({
     });
   }
   return {
-    ...tachieInfo,
+    title: tachieInfo.title,
+    user: tachieInfo.user,
+    sha: tachieInfo.sha,
+    approx_size: tachieInfo.approxSize,
+    parent_work_url: tachieInfo.parentWorkUrl,
+    thumbnail: tachieInfo.thumbnail,
     date: new Date(revision.createdAt * 1000).toISOString(),
     idx: revision.idx,
     download: `https://tachie.net/w/${query.key}/download`,

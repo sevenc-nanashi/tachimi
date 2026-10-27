@@ -1,5 +1,5 @@
 [workspace]
-members = ["packages/tachimi-cli", "packages/tachimi-core"]
+members = ["packages/tachimi-cli", "packages/tachimi-common"]
 resolver = "3"
 
 [workspace.package]
@@ -7,4 +7,4 @@ version = "0.1.0"
 edition = "2024"
 
 [workspace.dependencies]
-tachimi-core = { path = "packages/tachimi-core" }
+tachimi-common = { path = "packages/tachimi-common" }

@@ -1,5 +1,5 @@
 [package]
-name = "tachimi-core"
+name = "tachimi-common"
 version.workspace = true
 edition.workspace = true
 

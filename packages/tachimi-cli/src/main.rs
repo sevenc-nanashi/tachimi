@@ -3,12 +3,12 @@ mod cli;
 mod config;
 
 fn sync_data() -> anyhow::Result<()> {
-    let data_path = tachimi_core::data_path();
+    let data_path = tachimi_common::data_path();
     tracing::info!("Data path: {:?}", data_path);
     std::fs::create_dir_all(data_path.parent().expect("Failed to get parent directory"))?;
     serde_json::to_writer_pretty(
         std::fs::File::create(data_path).expect("Failed to create data file"),
-        &tachimi_core::RootData {
+        &tachimi_common::RootData {
             cli_path: std::env::current_exe().expect("Failed to get current executable path"),
         },
     )?;

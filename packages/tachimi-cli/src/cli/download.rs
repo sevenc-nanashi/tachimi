@@ -1,4 +1,4 @@
-use tachimi_core::DownloadInfo;
+use tachimi_common::{DownloadInfo, TachieApiResponse};
 
 use anyhow::Context;
 use std::io::Read;
@@ -173,7 +173,7 @@ fn download_archive(
 fn save_metadata(
     agent: &ureq::Agent,
     key: &str,
-    info: crate::api::TachieApiResponse,
+    info: TachieApiResponse,
     destination: &std::path::Path,
 ) -> anyhow::Result<()> {
     let metadata_dir = destination.join(".tachimi");

@@ -7,13 +7,13 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            tachie_dir: tachimi_core::data_dir().join("tachies"),
+            tachie_dir: tachimi_common::data_dir().join("tachies"),
         }
     }
 }
 
 pub fn load_config() -> anyhow::Result<Config> {
-    let config_path = tachimi_core::data_path();
+    let config_path = tachimi_common::data_path();
 
     if !config_path.exists() {
         let default_config = Config::default();

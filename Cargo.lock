@@ -546,7 +546,7 @@ dependencies = [
  "ring",
  "serde",
  "serde_json",
- "tachimi-core",
+ "tachimi-common",
  "tempfile",
  "tracing",
  "tracing-subscriber",
@@ -556,7 +556,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tachimi-core"
+name = "tachimi-common"
 version = "0.1.0"
 dependencies = [
  "dirs",

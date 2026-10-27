@@ -1,4 +1,4 @@
-use tachimi_core::VersionInfo;
+use tachimi_common::VersionInfo;
 
 use usage_rs::Args;
 

@@ -3,11 +3,15 @@ name = "tachimi-cli"
 version.workspace = true
 edition.workspace = true
 
+[[bin]]
+name = "tachimi"
+path = "src/main.rs"
+
 [dependencies]
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
 usage-rs = { version = "7", features = ["completions"] }
-tachimi-core.workspace = true
+tachimi-common.workspace = true
 anyhow = "1.0.104"
 tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
