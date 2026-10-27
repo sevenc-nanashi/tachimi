@@ -1,6 +1,5 @@
 mod cli;
 mod config;
-mod tachie_net;
 
 fn sync_data() -> anyhow::Result<()> {
     let data_path = tachimi_core::data_path();
@@ -52,5 +51,6 @@ fn main() -> anyhow::Result<()> {
     match cli.command {
         cli::Commands::Version(version) => cli::version::run(&config, &version),
         cli::Commands::List(list) => cli::list::run(&config, &list),
+        cli::Commands::Download(download) => cli::download::run(&config, &download),
     }
 }

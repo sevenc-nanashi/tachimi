@@ -8,7 +8,7 @@ type TachieInfo = {
   title: string;
   user: string;
   sha: string;
-  parentWorkId: string | undefined;
+  parentWorkUrl: string | null;
   thumbnail: string;
 };
 
@@ -17,6 +17,10 @@ async function getInfo(key: string): Promise<TachieInfo> {
   const response = await fetch(`https://tachie.net/w/${key}`, {
     cf: {
       cacheTtl: cacheDuration,
+    },
+    headers: {
+      "user-agent":
+        "tachimi-server/1.0, https://github.com/sevenc-nanashi/tachimi",
     },
   });
   if (response.status === 404) {
@@ -53,19 +57,18 @@ async function getInfo(key: string): Promise<TachieInfo> {
   }
 
   const dt = parsed.document.querySelectorAll(".file-facts dt");
-  let parentWorkId: string | undefined;
+  let parentWorkUrl: string | null = null;
   for (let i = 0; i < dt.length; i++) {
     if (dt[i]?.textContent === "親作品") {
       const dd = dt[i]?.nextElementSibling;
-      const link = dd?.querySelector("a");
-      if (link?.getAttribute("href")?.includes("nicovideo.jp")) {
-        const url = new URL(link.getAttribute("href")!);
-        parentWorkId = url.searchParams.get("id") || undefined;
+      const href = dd?.querySelector("a")?.getAttribute("href");
+      if (href?.includes("nicovideo.jp")) {
+        parentWorkUrl = href;
       }
     }
   }
 
-  return { title, user, sha, thumbnail, parentWorkId };
+  return { title, user, sha, thumbnail, parentWorkUrl };
 }
 
 async function upsertRevisionIndex(

@@ -1,5 +1,5 @@
-pub mod list;
 pub mod download;
+pub mod list;
 pub mod version;
 use usage_rs::{Cli, Subcommands};
 
@@ -14,4 +14,5 @@ pub struct Greet {
 pub enum Commands {
     Version(version::Version),
     List(list::List),
+    Download(download::Download),
 }

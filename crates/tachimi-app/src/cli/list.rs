@@ -9,6 +9,8 @@ pub struct TachieInfo {
     pub name: String,
     pub user: String,
     pub sha: String,
+    pub parent_work_url: Option<String>,
+    pub idx: usize,
     pub thumbnail: std::path::PathBuf,
 }
 
@@ -18,6 +20,8 @@ pub struct TachieData {
     pub name: String,
     pub user: String,
     pub sha: String,
+    pub parent_work_url: Option<String>,
+    pub idx: usize,
 }
 
 pub fn run(config: &crate::config::Config, _list: &List) -> anyhow::Result<()> {
@@ -55,6 +59,8 @@ fn read_tachie_dir(tachie_dir: &std::path::Path) -> anyhow::Result<TachieInfo> {
         name: tachie_data.name,
         user: tachie_data.user,
         sha: tachie_data.sha,
+        parent_work_url: tachie_data.parent_work_url,
+        idx: tachie_data.idx,
         thumbnail: thumbnail_path,
     })
 }
