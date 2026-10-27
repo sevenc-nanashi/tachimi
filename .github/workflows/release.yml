@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Build version (e.g. 0.2.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: jdx/mise-action@v5
+      - uses: dtolnay/rust-toolchain@stable
+      - run: bun install --frozen-lockfile
+      - name: Set version
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          BUILD_VERSION: ${{ inputs.version }}
+        run: bun tools/set-version.ts "$env:BUILD_VERSION"
+      - run: bun run build
+      - uses: actions/upload-artifact@v7
+        with:
+          name: tachimi-windows
+          path: dist/*.zip
+          if-no-files-found: error
+          compression-level: 0

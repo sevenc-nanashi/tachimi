@@ -7,7 +7,7 @@ pub mod version;
 use usage_rs::{Cli, Subcommands};
 
 #[derive(Cli)]
-#[usage(bin = "tachimi", version = "0.1.0", completion)]
+#[usage(bin = "tachimi", completion)]
 pub struct Greet {
     #[usage(subcommand)]
     pub command: Commands,

@@ -2852,7 +2852,7 @@ dependencies = [
 
 [[package]]
 name = "tachimi-aviutl2"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "aviutl2",
@@ -2864,7 +2864,7 @@ dependencies = [
 
 [[package]]
 name = "tachimi-cli"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "dirs",
@@ -2884,7 +2884,7 @@ dependencies = [
 
 [[package]]
 name = "tachimi-common"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "dirs",
  "serde",
