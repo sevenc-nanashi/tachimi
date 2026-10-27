@@ -29,9 +29,11 @@ export default function IconButton(props: {
   icon: string;
   children?: JSX.Element;
   onClick?: () => void;
+  disabled?: boolean;
 }) {
   return (
     <Button
+      disabled={props.disabled}
       style={{
         ...(props.level === "primary"
           ? {
@@ -67,6 +69,7 @@ export default function IconButton(props: {
           : padding[props.size],
         fontSize: fontSizes[props.size],
         gap: props.children ? padding[props.size] : 0,
+        opacity: props.disabled ? 0.5 : 1,
       }}
 
       onClick={props.onClick}

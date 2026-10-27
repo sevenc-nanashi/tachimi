@@ -8,6 +8,8 @@ pub struct TachieApiResponse {
     #[serde(rename = "parentWorkUrl")]
     pub parent_work_url: Option<String>,
     pub thumbnail: String,
+    #[serde(rename = "approxSize")]
+    pub approx_size: f64,
     pub date: String,
     pub idx: usize,
     pub download: String,

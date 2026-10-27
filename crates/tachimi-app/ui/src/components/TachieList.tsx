@@ -1,6 +1,6 @@
 import * as theme from "~/theme.ts";
 import {
-  createResource,
+  type Resource,
   createSignal,
   For,
   Match,
@@ -11,8 +11,10 @@ import * as cli from "~/cli.ts";
 import * as actions from "~/actions.ts";
 import TachieEntry from "./TachieEntry.tsx";
 
-export default function TachieList() {
-  const [tachies] = createResource(cli.listTachie);
+export default function TachieList(props: {
+  tachies: Resource<cli.TachieInfo[]>;
+}) {
+  const tachies = props.tachies;
   const [openError, setOpenError] = createSignal<string>();
 
   async function openFolder(dir: string) {

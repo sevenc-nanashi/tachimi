@@ -1,10 +1,9 @@
-import { Plus } from "lucide-static";
 import { createResource, Show } from "solid-js";
 import * as theme from "~/theme.ts";
 import * as cli from "~/cli.ts";
-import IconButton from "./IconButton.tsx";
+import DownloadDialog from "./DownloadDialog.tsx";
 
-export default function Header() {
+export default function Header(props: { onDownloaded: () => void }) {
   const [version] = createResource(cli.getVersion);
 
   return (
@@ -37,9 +36,7 @@ export default function Header() {
         >{`v${version()?.version}`}</text>
       </Show>
       <div style={{ flexGrow: 1 }} />
-      <IconButton level="primary" icon={Plus} size="small">
-        立ち絵をダウンロード
-      </IconButton>
+      <DownloadDialog onDownloaded={props.onDownloaded} />
     </div>
   );
 }

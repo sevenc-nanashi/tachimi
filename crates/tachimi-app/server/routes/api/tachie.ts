@@ -8,6 +8,7 @@ type TachieInfo = {
   title: string;
   user: string;
   sha: string;
+  approxSize: number;
   parentWorkUrl: string | null;
   thumbnail: string;
 };
@@ -50,14 +51,9 @@ async function getInfo(key: string): Promise<TachieInfo> {
   const thumbnail =
     configuredThumbnail || mainStaticImage || viewerFallbackImage;
 
-  if (!title || !user || !sha || !thumbnail) {
-    throw new HTTPException(500, {
-      message: `Failed to parse tachie info for key ${key}`,
-    });
-  }
-
   const dt = parsed.document.querySelectorAll(".file-facts dt");
   let parentWorkUrl: string | null = null;
+  let approxSize: number | null = null;
   for (let i = 0; i < dt.length; i++) {
     if (dt[i]?.textContent === "親作品") {
       const dd = dt[i]?.nextElementSibling;
@@ -65,10 +61,30 @@ async function getInfo(key: string): Promise<TachieInfo> {
       if (href?.includes("nicovideo.jp")) {
         parentWorkUrl = href;
       }
+    } else if (dt[i]?.textContent === "種類・大きさ") {
+      const dd = dt[i]?.nextElementSibling;
+      const sizeText = dd?.textContent?.match(/(\d+(?:\.\d+)?)\s*([KMG]B)/);
+      if (sizeText) {
+        const size = parseFloat(sizeText[1]!);
+        const unit = sizeText[2]!;
+        if (unit === "KB") {
+          approxSize = size * 1024;
+        } else if (unit === "MB") {
+          approxSize = size * 1024 * 1024;
+        } else if (unit === "GB") {
+          approxSize = size * 1024 * 1024 * 1024;
+        }
+      }
     }
   }
 
-  return { title, user, sha, thumbnail, parentWorkUrl };
+  if (!title || !user || !sha || !thumbnail || !approxSize) {
+    throw new HTTPException(500, {
+      message: `Failed to parse tachie info for key ${key}`,
+    });
+  }
+
+  return { title, user, sha, thumbnail, approxSize, parentWorkUrl };
 }
 
 async function upsertRevisionIndex(

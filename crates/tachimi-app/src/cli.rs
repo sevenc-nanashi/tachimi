@@ -1,5 +1,6 @@
 pub mod download;
 pub mod fetch;
+pub mod info;
 pub mod list;
 pub mod shallow_fetch;
 pub mod version;
@@ -18,5 +19,6 @@ pub enum Commands {
     List(list::List),
     Download(download::Download),
     Fetch(fetch::Fetch),
+    Info(info::Info),
     ShallowFetch(shallow_fetch::ShallowFetch),
 }

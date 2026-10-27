@@ -35,7 +35,12 @@ fn run_gui() -> anyhow::Result<()> {
 fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt()
         .with_writer(std::io::stderr)
-        .with_max_level(tracing::Level::INFO)
+        .with_env_filter(
+            tracing_subscriber::EnvFilter::builder()
+                .with_default_directive(tracing::Level::INFO.into())
+                .with_env_var("TACHIMI_LOG")
+                .from_env()?,
+        )
         .init();
 
     sync_data()?;
@@ -54,6 +59,7 @@ fn main() -> anyhow::Result<()> {
         cli::Commands::List(list) => cli::list::run(&config, &list),
         cli::Commands::Download(download) => cli::download::run(&config, &download),
         cli::Commands::Fetch(fetch) => cli::fetch::run(&config, &fetch),
+        cli::Commands::Info(info) => cli::info::run(&config, &info),
         cli::Commands::ShallowFetch(fetch) => cli::shallow_fetch::run(&config, &fetch),
     }
 }
