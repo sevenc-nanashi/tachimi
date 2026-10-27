@@ -5,7 +5,7 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@gpuix/solid/dialog";
-import { ArrowLeft, Download, Search } from "lucide-static";
+import { ArrowLeft, Download, Search, X } from "lucide-static";
 import { createSignal, Show } from "solid-js";
 import * as cli from "~/cli.ts";
 import * as theme from "~/theme.ts";
@@ -202,6 +202,17 @@ export default function DownloadDialog(props: { onDownloaded: () => void }) {
               gap: theme.spacing.sm,
             }}
           >
+            <Show when={!info()}>
+              <IconButton
+                level="secondary"
+                size="small"
+                icon={X}
+                disabled={busy()}
+                onClick={() => setOpen(false)}
+              >
+                閉じる
+              </IconButton>
+            </Show>
             <Show when={info()}>
               <IconButton
                 level="secondary"

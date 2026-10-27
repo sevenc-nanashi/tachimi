@@ -16,25 +16,6 @@ export default function TachieList(props: {
 }) {
   const tachies = props.tachies;
   const [openError, setOpenError] = createSignal<string>();
-
-  async function openFolder(dir: string) {
-    setOpenError(undefined);
-    try {
-      await actions.openFolder(dir);
-    } catch (error) {
-      setOpenError(String(error));
-    }
-  }
-
-  async function openUrl(url: string) {
-    setOpenError(undefined);
-    try {
-      await actions.openUrl(url);
-    } catch (error) {
-      setOpenError(String(error));
-    }
-  }
-
   return (
     <div
       style={{
@@ -67,13 +48,7 @@ export default function TachieList(props: {
               <text style={{ color: theme.muted }}>立ち絵はまだありません</text>
             }
           >
-            {(tachie) => (
-              <TachieEntry
-                tachie={tachie}
-                onOpenFolder={() => void openFolder(tachie.dir)}
-                onOpenUrl={() => void openUrl(tachie.url)}
-              />
-            )}
+            {(tachie) => <TachieEntry tachie={tachie} />}
           </For>
         </Match>
       </Switch>

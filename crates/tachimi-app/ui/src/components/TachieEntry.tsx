@@ -1,13 +1,10 @@
 import { FolderOpen } from "lucide-static";
 import type { TachieInfo } from "~/cli.ts";
 import * as theme from "~/theme.ts";
+import * as actions from "~/actions.ts";
 import IconButton from "./IconButton.tsx";
 
-export default function TachieEntry(props: {
-  tachie: TachieInfo;
-  onOpenFolder: () => void;
-  onOpenUrl: () => void;
-}) {
+export default function TachieEntry(props: { tachie: TachieInfo }) {
   return (
     <div
       style={{
@@ -63,10 +60,10 @@ export default function TachieEntry(props: {
         <div
           role="link"
           tabIndex={0}
-          onClick={props.onOpenUrl}
+          onClick={() => actions.openUrl(props.tachie.url)}
           onKeyDown={(event) => {
             if (event.key === "enter" && !event.isHeld) {
-              props.onOpenUrl();
+              actions.openUrl(props.tachie.url);
             }
           }}
           style={{
@@ -84,7 +81,7 @@ export default function TachieEntry(props: {
             level="secondary"
             size="small"
             icon={FolderOpen}
-            onClick={props.onOpenFolder}
+            onClick={() => actions.openFolder(props.tachie.dir)}
           >
             フォルダを開く
           </IconButton>

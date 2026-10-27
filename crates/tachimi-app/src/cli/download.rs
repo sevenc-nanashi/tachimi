@@ -24,11 +24,11 @@ pub fn run(config: &crate::config::Config, args: &Download) -> anyhow::Result<()
 
     std::fs::create_dir_all(&config.tachie_dir)?;
     let destination = config.tachie_dir.join(format!("{}-{}", args.key, info.idx));
-    anyhow::ensure!(
-        !destination.try_exists()?,
-        "Tachie already exists: {:?}",
-        destination
-    );
+    if destination.exists() {
+        std::fs::remove_dir_all(&destination)
+            .context("Failed to remove existing tachie directory")?;
+    }
+
     let staging = tempfile::tempdir_in(&config.tachie_dir)?;
     download_archive(&agent, &info.download, staging.path(), &config.tachie_dir)?;
     save_metadata(&agent, &args.key, info, staging.path())?;
