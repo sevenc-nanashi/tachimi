@@ -17,6 +17,16 @@ export default defineConfig({
             primary: "#287a3d",
             primaryHover: "#1c5e2d",
           },
+          sidebar: [
+            {
+              text: "トップ",
+              link: "/",
+            },
+            {
+              text: "インストール",
+              link: "/install",
+            },
+          ],
         }),
       },
     }),

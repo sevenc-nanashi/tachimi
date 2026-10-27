@@ -6,22 +6,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@gpuix/solid/dialog";
-import { X } from "lucide-static";
-import { createResource, createSignal } from "solid-js";
-import * as cli from "~/cli.ts";
+import { RefreshCw, X } from "lucide-static";
+import { createResource, createSignal, Show } from "solid-js";
+import { checkForUpdate, installUrl, version } from "~/update.ts";
 import * as theme from "~/theme.ts";
 import * as actions from "~/actions.ts";
 import IconButton from "./IconButton.tsx";
+import Link from "./Link.tsx";
 
 const homepage = "https://tachimi.sevenc7c.com";
 
 export default function AboutDialog() {
   const [open, setOpen] = createSignal(false);
-  const [version] = createResource(cli.getVersion);
-  const versionLabel = () => {
-    if (version.error) return "バージョン取得失敗";
-    if (version.loading) return "読み込み中...";
-    return `v${version()!.version}`;
+  const [update, { refetch }] = createResource(checkForUpdate);
+  const availableUpdate = () => !update.error && !update.loading && update();
+  const updateLabel = () => {
+    if (update.loading) return "更新を確認中...";
+    if (update.error) return "更新の確認に失敗しました";
+    if (update()) return `v${update()} が利用できます`;
+    return "最新バージョンです";
   };
 
   return (
@@ -52,8 +55,13 @@ export default function AboutDialog() {
           Tachimi
         </text>
         <text style={{ color: theme.muted, fontSize: theme.fontSize.sm }}>
-          {versionLabel()}
+          {`v${version}`}
         </text>
+        <Show when={availableUpdate()}>
+          <text style={{ color: theme.accent, fontSize: theme.fontSize.sm }}>
+            更新あり
+          </text>
+        </Show>
       </DialogTrigger>
       <DialogPortal>
         <DialogBackdrop style={{ backgroundColor: theme.overlay }} />
@@ -87,12 +95,30 @@ export default function AboutDialog() {
             >
               Tachimi
             </text>
-            <text style={{ color: theme.muted }}>{versionLabel()}</text>
+            <text style={{ color: theme.muted }}>{`v${version}`}</text>
           </DialogTitle>
           <text style={{ color: theme.text }}>
             Tachimiは、TACHIEの立ち絵を管理するためのツールです。
             このツールは非公式のツールであり、TACHIEの公式とは関係ありません。
           </text>
+          <text
+            role="status"
+            style={{ color: update.error ? theme.danger : theme.muted }}
+          >
+            {updateLabel()}
+          </text>
+          <Show when={availableUpdate()}>
+            <Link url={installUrl}>最新版のインストールページを開く</Link>
+          </Show>
+          <IconButton
+            level="secondary"
+            size="small"
+            icon={RefreshCw}
+            disabled={update.loading}
+            onClick={() => void refetch()}
+          >
+            更新を確認
+          </IconButton>
           <div
             role="link"
             tabIndex={0}
