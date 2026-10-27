@@ -71,6 +71,7 @@ fn save_metadata(
     serde_json::to_writer_pretty(
         std::fs::File::create(metadata_dir.join("data.json"))?,
         &super::list::TachieData {
+            key: key.to_owned(),
             url: format!("https://tachie.net/w/{key}"),
             name: info.title,
             user: info.user,

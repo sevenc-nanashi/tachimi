@@ -31,15 +31,7 @@ fn installed_keys(config: &crate::config::Config) -> anyhow::Result<Vec<String>>
     } else {
         Vec::new()
     };
-    let mut keys: Vec<_> = tachies
-        .iter()
-        .map(|tachie| {
-            tachie
-                .url
-                .trim_start_matches("https://tachie.net/w/")
-                .to_owned()
-        })
-        .collect();
+    let mut keys: Vec<_> = tachies.iter().map(|tachie| tachie.key.clone()).collect();
     keys.sort_unstable();
     keys.dedup();
     Ok(keys)

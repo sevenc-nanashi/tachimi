@@ -6,6 +6,7 @@ pub struct List {}
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
 pub struct TachieInfo {
     pub dir: std::path::PathBuf,
+    pub key: String,
     pub url: String,
     pub name: String,
     pub user: String,
@@ -17,6 +18,7 @@ pub struct TachieInfo {
 
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
 pub struct TachieData {
+    pub key: String,
     pub url: String,
     pub name: String,
     pub user: String,
@@ -62,6 +64,7 @@ fn read_tachie_dir(tachie_dir: &std::path::Path) -> anyhow::Result<TachieInfo> {
     let thumbnail_path = root.join("thumbnail.png");
     Ok(TachieInfo {
         dir: tachie_dir.to_path_buf(),
+        key: tachie_data.key,
         url: tachie_data.url,
         name: tachie_data.name,
         user: tachie_data.user,

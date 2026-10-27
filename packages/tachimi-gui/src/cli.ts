@@ -26,6 +26,7 @@ async function callCli(args: string[]): Promise<string> {
 
 export type TachieInfo = {
   dir: string;
+  key: string;
   url: string;
   name: string;
   user: string;
