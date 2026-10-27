@@ -5,7 +5,7 @@ await Bun.build({
   entrypoints: ["./src/app.tsx"],
   compile: {
     outfile: "dist/tachimi-gui",
-    windows: { hideConsole: true },
+    windows: { hideConsole: true, icon: "./icon.ico" },
   },
   plugins: [
     createSolidPlugin(),
