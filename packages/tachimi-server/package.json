@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "typecheck": "bun check",
-    "dev": "vite",
-    "build": "vite build"
+    "dev": "bun run --cwd ../tachimi-docs build && vite",
+    "build": "bun run --cwd ../tachimi-docs build && vite build"
   },
   "devDependencies": {
     "@types/bun": "latest",

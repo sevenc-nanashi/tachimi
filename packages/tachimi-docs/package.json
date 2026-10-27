@@ -1,0 +1,19 @@
+{
+  "name": "tachimi-docs",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "typecheck": "bun check",
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@ox-content/vite-plugin": "^3.4.0",
+    "@types/bun": "latest",
+    "vite": "^8.3.5"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  }
+}

@@ -3,4 +3,5 @@ import { voidPlugin } from "void";
 
 export default defineConfig({
   plugins: [voidPlugin()],
+  publicDir: "../tachimi-docs/dist",
 });

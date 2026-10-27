@@ -1,14 +1,3 @@
-# Tachimi for AviUtl2
+# tachimi-aviutl2 / tachimi.aux2
 
-Tachimi でダウンロードした画像を AviUtl2 のタイムラインに配置します。
-
-1. Tachimi を起動して立ち絵をダウンロードします。
-2. `tachimi.aux2` を AviUtl2 にインストールし、AviUtl2 を再起動します。
-3. 「表示」から Tachimi を開き、立ち絵を選択します。
-4. タイムライン上のオブジェクトを選択し、一覧の画像をクリックします。選択オブジェクトの開始位置、直下のレイヤーに 5 秒間配置されます。
-
-PSD は現在配置できません。PSDToolKit2 と GCMZDrops2 を導入し、PSD をエクスプローラーからタイムラインに配置してください。PSDToolKit2 の「最初に置くやつ」も必要です。
-
-## 開発
-
-このディレクトリで `au2 dev` を実行すると開発用 AviUtl2 に配置できます。`au2 release` で配布パッケージを生成します。
+Tachimi でダウンロードした立ち絵を AviUtl2 のタイムラインに配置したり、配置した立ち絵から親作品一覧を取得するための AviUtl2 プラグインです。
