@@ -10,7 +10,7 @@ async function buildGui() {
   await $`bun run --cwd ./packages/tachimi-gui build`;
   await $`cargo build -r -p tachimi-cli`;
 
-  await mkdir("dist/tachimi-gui", { recursive: true });
+  await mkdir("dist/tachimi", { recursive: true });
   await copyFile("./target/release/tachimi.exe", "./dist/tachimi/tachimi.exe");
   await copyFile(
     "./packages/tachimi-gui/dist/tachimi-gui.exe",
