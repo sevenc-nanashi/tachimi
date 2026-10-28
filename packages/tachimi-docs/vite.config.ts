@@ -20,6 +20,9 @@ export default defineConfig({
             primary: "#287a3d",
             primaryHover: "#1c5e2d",
           },
+          socialLinks: {
+            github: "https://github.com/sevenc-nanashi/tachimi",
+          },
           sidebar: [
             {
               text: "トップ",
