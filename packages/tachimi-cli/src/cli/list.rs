@@ -73,3 +73,27 @@ fn read_tachie_dir(tachie_dir: &std::path::Path) -> anyhow::Result<TachieInfo> {
         thumbnail: thumbnail_path,
     })
 }
+
+pub(super) fn find_tachie_dir(
+    config: &crate::config::Config,
+    key: &str,
+) -> anyhow::Result<Option<std::path::PathBuf>> {
+    let mut matches = list_tachies(config)?
+        .into_iter()
+        .filter(|item| item.key == key);
+    let Some(item) = matches.next() else {
+        return Ok(None);
+    };
+    anyhow::ensure!(
+        matches.next().is_none(),
+        "同じキーの立ち絵が複数あります: {key}"
+    );
+    let root = config.tachie_dir.canonicalize()?;
+    let dir = item.dir.canonicalize()?;
+    anyhow::ensure!(
+        dir.parent() == Some(root.as_path()) && !std::fs::symlink_metadata(&item.dir)?.is_symlink(),
+        "立ち絵フォルダが保存先の直下にありません: {:?}",
+        item.dir
+    );
+    Ok(Some(item.dir))
+}

@@ -23,7 +23,29 @@ pub fn run(config: &crate::config::Config, args: &Download) -> anyhow::Result<()
     let info = crate::api::fetch_info(&agent, &args.key)?;
 
     std::fs::create_dir_all(&config.tachie_dir)?;
-    let destination = config.tachie_dir.join(&args.key);
+    let destination = match super::list::find_tachie_dir(config, &args.key)? {
+        Some(dir) => dir,
+        None => {
+            let title: String = info
+                .title
+                .chars()
+                .map(|c| {
+                    if c.is_control() || "<>:\"/\\|?*".contains(c) {
+                        '_'
+                    } else {
+                        c
+                    }
+                })
+                .collect();
+            let dir = config.tachie_dir.join(format!(
+                "{}_{}",
+                args.key,
+                title.trim_end_matches([' ', '.'])
+            ));
+            anyhow::ensure!(!dir.try_exists()?, "保存先が既に存在します: {:?}", dir);
+            dir
+        }
+    };
     let staging = tempfile::tempdir_in(&config.tachie_dir)?;
     download_archive(&agent, &info.download, staging.path(), &config.tachie_dir)?;
     let checksums = archive_checksums(staging.path(), staging.path())?;

@@ -4,6 +4,7 @@ import * as theme from "~/theme.ts";
 import * as actions from "~/actions.ts";
 import IconButton from "./IconButton.tsx";
 import UpdateDialog from "./UpdateDialog.tsx";
+import DeleteDialog from "./DeleteDialog.tsx";
 import type { UpdateStatus } from "./TachieList.tsx";
 import Link from "./Link.tsx";
 import { Show } from "solid-js";
@@ -129,6 +130,13 @@ export default function TachieEntry(props: {
             tachie={props.tachie}
             updateStatus={props.updateStatus}
             onDownloaded={props.onDownloaded}
+          />
+          <DeleteDialog
+            tachie={props.tachie}
+            onDeleted={() => {
+              props.onExcludeParentWork();
+              props.onDownloaded();
+            }}
           />
         </div>
       </div>

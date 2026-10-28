@@ -25,6 +25,7 @@ const fontSizes = {
 
 export default function IconButton(props: {
   level: "primary" | "secondary";
+  type?: "danger";
   size: "small" | "medium" | "large";
   icon: string;
   children?: JSX.Element;
@@ -37,21 +38,27 @@ export default function IconButton(props: {
       style={{
         ...(props.level === "primary"
           ? {
-              backgroundColor: theme.accent,
+              backgroundColor:
+                props.type === "danger" ? theme.danger : theme.accent,
               color: theme.onAccent,
               borderRadius: 128,
               hover: {
-                backgroundColor: theme.accentStrong,
+                backgroundColor:
+                  props.type === "danger"
+                    ? theme.dangerStrong
+                    : theme.accentStrong,
               },
             }
           : {
               backgroundColor: theme.bg,
-              borderColor: theme.lineStrong,
-              color: theme.text,
+              borderColor:
+                props.type === "danger" ? theme.danger : theme.lineStrong,
+              color: props.type === "danger" ? theme.danger : theme.text,
               borderWidth: 1,
               borderRadius: 128,
               hover: {
-                backgroundColor: theme.fill,
+                backgroundColor:
+                  props.type === "danger" ? theme.dangerSoft : theme.fill,
               },
             }),
 
@@ -79,13 +86,17 @@ export default function IconButton(props: {
               cursor: "pointer",
             }),
       }}
-
       onClick={props.onClick}
     >
       <svg
         source={props.icon}
         style={{
-          color: props.level === "primary" ? theme.onAccent : theme.text,
+          color:
+            props.level === "primary"
+              ? theme.onAccent
+              : props.type === "danger"
+                ? theme.danger
+                : theme.text,
           width: sizes[props.size] - padding[props.size] * 2,
           height: sizes[props.size] - padding[props.size] * 2,
         }}

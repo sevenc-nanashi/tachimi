@@ -17,7 +17,7 @@ Windows 向けの最新版をダウンロードできます。
 
 ## YMM4 プラグイン
 
-先に Tachimi GUI を一度起動してください。`.ymme` をダウンロードしてYMM4で開き、インストール後に再起動してください。ツールの「Tachimi」から利用できます。現行の.NET 10版YMM4／YMM4 Liteが対象です。
+`.ymme` をダウンロードしてYMM4で開き、インストール後に再起動してください。
 
 <script type="module">
   const status = document.getElementById("release-status");

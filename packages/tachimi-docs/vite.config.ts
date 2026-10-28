@@ -11,6 +11,7 @@ export default defineConfig({
       docs: false,
       ssg: {
         siteName: "Tachimi",
+        pagination: true,
         theme: defineTheme({
           extends: defaultTheme,
           colors: {

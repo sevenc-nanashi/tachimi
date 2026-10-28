@@ -114,6 +114,10 @@ export async function downloadKey(key: string): Promise<void> {
   await callCli(["download", "--key", key]);
 }
 
+export async function deleteTachie(key: string): Promise<void> {
+  await callCli(["delete", "--key", key]);
+}
+
 type Updates = { revisions: Record<string, number | null> };
 
 export async function shallowFetch(): Promise<Updates> {

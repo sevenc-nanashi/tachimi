@@ -1,3 +1,4 @@
+pub mod delete;
 pub mod download;
 pub mod fetch;
 pub mod info;
@@ -19,6 +20,7 @@ pub enum Commands {
     Version(version::Version),
     List(list::List),
     Download(download::Download),
+    Delete(delete::Delete),
     Fetch(fetch::Fetch),
     Info(info::Info),
     ShallowFetch(shallow_fetch::ShallowFetch),
