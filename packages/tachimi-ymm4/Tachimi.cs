@@ -244,7 +244,7 @@ public sealed class TachimiView : UserControl
                         }
                         if (files.Children.Count == 0) files.Children.Add(new TextBlock
                         {
-                            Text = "PSD・PNG ファイルが見つかりません。"
+                            Text = "PSD・画像ファイルが見つかりません。"
                         });
                     }
                     catch (Exception ex)
@@ -319,7 +319,7 @@ public sealed class TachimiView : UserControl
             {
                 foreach (var file in Scan(entry.FullName)) yield return file;
             }
-            else if (entry is FileInfo && (entry.Extension.Equals(".png", StringComparison.OrdinalIgnoreCase) || entry.Extension.Equals(".psd", StringComparison.OrdinalIgnoreCase))) yield return entry.FullName;
+            else if (entry is FileInfo && entry.Extension.ToLowerInvariant() is ".psd" or ".png" or ".jpg" or ".jpeg" or ".bmp" or ".gif" or ".webp" or ".tif" or ".tiff") yield return entry.FullName;
 
         }
 

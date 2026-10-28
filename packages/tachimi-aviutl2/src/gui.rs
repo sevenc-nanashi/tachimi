@@ -240,7 +240,7 @@ impl TachimiApp {
 
     fn render_files(&mut self, ui: &mut egui::Ui, index: usize) {
         if self.files.is_empty() {
-            ui.label("PSD・PNG ファイルが見つかりません。");
+            ui.label("PSD・画像ファイルが見つかりません。");
         }
         for file in &self.files {
             let relative = file
@@ -519,7 +519,11 @@ fn scan_files(root: &Path) -> Result<Vec<PathBuf>> {
                 scan(&entry.path(), files)?;
             } else if kind.is_file()
                 && entry.path().extension().is_some_and(|ext| {
-                    ext.eq_ignore_ascii_case("png") || ext.eq_ignore_ascii_case("psd")
+                    [
+                        "psd", "png", "jpg", "jpeg", "bmp", "gif", "webp", "tif", "tiff",
+                    ]
+                    .iter()
+                    .any(|supported| ext.eq_ignore_ascii_case(supported))
                 })
             {
                 files.push(entry.path());

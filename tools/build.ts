@@ -39,9 +39,7 @@ async function buildYMM4() {
   await $`dotnet build packages/tachimi-ymm4 -c Release -p:Version=${version}`;
   await mkdir("dist/tachimi-ymm4", { recursive: true });
   const releaseDir = await Array.fromAsync(
-    glob(
-      "packages/tachimi-ymm4/bin/Release/net10.0-windows10.0.19041.0/*.{dll,pdb,xml}",
-    ),
+    glob("packages/tachimi-ymm4/bin/Release/*"),
   );
   await copyFile(
     `${releaseDir.at(-1)}/Tachimi.dll`,
