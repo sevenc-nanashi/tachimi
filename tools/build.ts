@@ -20,7 +20,9 @@ async function buildGui() {
     "./dist/tachimi-gui/tachimi-gui.exe",
   );
 
-  await $`powershell.exe -NoProfile -NonInteractive -Command "Compress-Archive -LiteralPath dist/tachimi-gui -DestinationPath dist/tachimi-gui.zip -Force -ErrorAction Stop"`;
+  await $`powershell.exe -NoProfile -NonInteractive -Command "Compress-Archive -LiteralPath dist/tachimi-gui -DestinationPath dist/tachimi-gui-${
+    version
+  }.zip -Force -ErrorAction Stop"`;
 }
 
 async function buildAviUtl2() {
