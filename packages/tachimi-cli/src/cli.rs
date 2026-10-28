@@ -15,6 +15,7 @@ pub struct Greet {
 
 #[derive(Subcommands)]
 pub enum Commands {
+    Ui,
     Version(version::Version),
     List(list::List),
     Download(download::Download),

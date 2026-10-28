@@ -18,3 +18,6 @@ const path = "packages/tachimi-gui/package.json";
 const manifest = await Bun.file(path).json();
 manifest.version = version;
 await Bun.write(path, JSON.stringify(manifest, null, 2) + "\n");
+
+const ymmProject = "packages/tachimi-ymm4/Tachimi.csproj";
+await Bun.write(ymmProject, (await Bun.file(ymmProject).text()).replace(/<Version>[^<]+<\/Version>/, `<Version>${version}</Version>`));

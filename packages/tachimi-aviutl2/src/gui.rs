@@ -55,6 +55,7 @@ pub struct TachimiApp {
     selected: Option<usize>,
     files: Vec<PathBuf>,
     error: Option<String>,
+    copied_text: Option<String>,
     updates: Vec<UpdateStatus>,
     update_check: Option<UpdateCheck>,
 }
@@ -69,6 +70,7 @@ impl TachimiApp {
             selected: None,
             files: Vec::new(),
             error: None,
+            copied_text: None,
             updates: Vec::new(),
             update_check: None,
         };
@@ -77,6 +79,7 @@ impl TachimiApp {
     }
 
     fn refresh(&mut self) {
+        self.copied_text = None;
         self.selected = None;
         self.files.clear();
         self.updates.clear();
@@ -172,6 +175,9 @@ impl TachimiApp {
     }
 
     fn render_status(&self, ui: &mut egui::Ui) {
+        if let Some(text) = &self.copied_text {
+            ui.label(format!("コピーしました: {text}"));
+        }
         if let Some(error) = &self.error {
             ui.colored_label(ui.visuals().error_fg_color, error);
         }
@@ -246,7 +252,10 @@ impl TachimiApp {
                 .clicked()
             {
                 if ui.input(|input| input.modifiers.ctrl) {
-                    ui.copy_text(file.to_string_lossy().to_string());
+                    let text = file.to_string_lossy().to_string();
+                    ui.copy_text(text.clone());
+                    self.copied_text = Some(text);
+                    ui.ctx().request_repaint();
                 } else if let Err(error) = insert_file(file) {
                     self.error = Some(format!("{error:#}"));
                 }

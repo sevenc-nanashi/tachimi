@@ -66,6 +66,7 @@ fn main() -> anyhow::Result<()> {
     let config = config::load_config()?;
     drop(data_lock);
     match cli.command {
+        cli::Commands::Ui => run_gui(),
         cli::Commands::Version(version) => cli::version::run(&config, &version),
         cli::Commands::List(list) => cli::list::run(&config, &list),
         cli::Commands::Download(download) => cli::download::run(&config, &download),

@@ -1,0 +1,8 @@
+{
+  "name": "tachimi-ymm4",
+  "private": true,
+  "scripts": {
+    "download:ymm4": "bun tools/download-ymm4.ts",
+    "create-symlink": "bun tools/create-symlink.ts"
+  }
+}

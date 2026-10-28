@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Version>0.0.0</Version>
+    <YMM4DirPath Condition="'$(YMM4DirPath)' == ''">$(MSBuildThisFileDirectory).ymm4</YMM4DirPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="YukkuriMovieMaker"><HintPath>$(YMM4DirPath)/YukkuriMovieMaker.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="YukkuriMovieMaker.Plugin"><HintPath>$(YMM4DirPath)/YukkuriMovieMaker.Plugin.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="YukkuriMovieMaker.Controls"><HintPath>$(YMM4DirPath)/YukkuriMovieMaker.Controls.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="YukkuriMovieMaker.Settings"><HintPath>$(YMM4DirPath)/YukkuriMovieMaker.Settings.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+  <Target Name="CheckYMM4" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(YMM4DirPath)/YukkuriMovieMaker.dll')" Text="packages/tachimi-ymm4 で bun run download:ymm4 を実行するか、YMM4DirPath に YMM4 のフォルダを指定してください。" />
+  </Target>
+</Project>

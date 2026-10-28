@@ -22,6 +22,12 @@ jobs:
       - uses: jdx/mise-action@v5
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Prepare YMM4 references
+        working-directory: packages/tachimi-ymm4
+        run: bun run download:ymm4
       - run: bun install --frozen-lockfile
       - name: Set version
         if: github.event_name == 'workflow_dispatch'
@@ -32,7 +38,9 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: tachimi-windows
-          path: dist/*.zip
+          path: |
+            dist/*.zip
+            dist/*.ymme
           if-no-files-found: error
           compression-level: 0
 
@@ -52,4 +60,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           RELEASE_VERSION: ${{ inputs.version }}
-        run: gh release create "v$RELEASE_VERSION" dist/*.zip --target "$GITHUB_SHA" --generate-notes
+        run: gh release create "v$RELEASE_VERSION" dist/*.zip dist/*.ymme --target "$GITHUB_SHA" --generate-notes

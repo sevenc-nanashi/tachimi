@@ -10,6 +10,7 @@ Tachimi は、 [TACHIE](https://tachie.net) 専用の立ち絵管理アプリで
 - `tachimi-docs`：ドキュメント。
 - `tachimi-gui`：GUI アプリ。
 - `tachimi-server`：tachie.net のデータを取得するためのプロキシ。
+- `tachimi-ymm4`：YMM4 プラグイン。
 
 ## ライセンス
 
