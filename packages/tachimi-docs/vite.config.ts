@@ -7,7 +7,6 @@ export default defineConfig({
     oxContent({
       srcDir: "content",
       outDir: "dist",
-      ogImage: true,
       docs: false,
       keyboardKeys: true,
       images: true,
