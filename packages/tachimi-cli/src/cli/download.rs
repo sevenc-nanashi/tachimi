@@ -185,7 +185,35 @@ fn download_archive(
 ) -> anyhow::Result<()> {
     let mut archive_file = tempfile::tempfile_in(temp_dir)?;
     let mut response = agent.get(url).call().context("Failed to download ZIP")?;
-    std::io::copy(&mut response.body_mut().as_reader(), &mut archive_file)?;
+    let total = response.body().content_length();
+    let mut reader = response.body_mut().as_reader();
+    let mut downloaded = 0_u64;
+    let mut reported = std::time::Instant::now();
+    if total.is_some_and(|total| total > 0) {
+        println!(
+            "{}",
+            serde_json::json!({ "type": "progress", "progress": 0.0 })
+        );
+    }
+    loop {
+        let count = std::io::copy(&mut reader.by_ref().take(256 * 1024), &mut archive_file)?;
+        downloaded += count;
+        if count == 0 || reported.elapsed() >= std::time::Duration::from_millis(100) {
+            if let Some(total) = total.filter(|total| *total > 0) {
+                println!(
+                    "{}",
+                    serde_json::json!({
+                        "type": "progress",
+                        "progress": (downloaded as f64 / total as f64).min(1.0),
+                    }),
+                );
+            }
+            reported = std::time::Instant::now();
+        }
+        if count == 0 {
+            break;
+        }
+    }
     let mut archive = zip::ZipArchive::new(archive_file).context("Failed to open ZIP")?;
     archive
         .extract(destination)

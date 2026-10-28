@@ -10,6 +10,7 @@ import { createSignal, Show } from "solid-js";
 import * as cli from "~/cli.ts";
 import * as theme from "~/theme.ts";
 import IconButton from "./IconButton.tsx";
+import DownloadProgress from "./DownloadProgress.tsx";
 import type { UpdateStatus } from "./TachieList.tsx";
 
 export default function UpdateDialog(props: {
@@ -19,13 +20,15 @@ export default function UpdateDialog(props: {
 }) {
   const [open, setOpen] = createSignal(false);
   const [busy, setBusy] = createSignal(false);
+  const [progress, setProgress] = createSignal<number>();
   const [error, setError] = createSignal<string>();
   async function update() {
     if (busy()) return;
     setBusy(true);
+    setProgress(undefined);
     setError(undefined);
     try {
-      await cli.downloadKey(props.tachie.key);
+      await cli.downloadKey(props.tachie.key, setProgress);
       setOpen(false);
       props.onDownloaded();
     } catch (error) {
@@ -96,7 +99,7 @@ export default function UpdateDialog(props: {
             </text>
           </Show>
           <Show when={busy()}>
-            <text style={{ color: theme.muted }}>ダウンロード中...</text>
+            <DownloadProgress value={progress()} />
           </Show>
           <div
             style={{

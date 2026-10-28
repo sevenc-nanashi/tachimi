@@ -10,6 +10,7 @@ import { createSignal, Show } from "solid-js";
 import * as cli from "~/cli.ts";
 import * as theme from "~/theme.ts";
 import IconButton from "./IconButton.tsx";
+import DownloadProgress from "./DownloadProgress.tsx";
 
 export default function DownloadDialog(props: { onDownloaded: () => void }) {
   const [open, setOpen] = createSignal(false);
@@ -17,6 +18,7 @@ export default function DownloadDialog(props: { onDownloaded: () => void }) {
   const [info, setInfo] = createSignal<cli.TachiePreview>();
   const [fetching, setFetching] = createSignal(false);
   const [downloading, setDownloading] = createSignal(false);
+  const [progress, setProgress] = createSignal<number>();
   const [error, setError] = createSignal<string>();
   const busy = () => fetching() || downloading();
 
@@ -36,9 +38,10 @@ export default function DownloadDialog(props: { onDownloaded: () => void }) {
   async function download() {
     if (busy() || !info()) return;
     setDownloading(true);
+    setProgress(undefined);
     setError(undefined);
     try {
-      await cli.downloadTachie(url());
+      await cli.downloadTachie(url(), setProgress);
       setOpen(false);
       setUrl("");
       props.onDownloaded();
@@ -189,7 +192,7 @@ export default function DownloadDialog(props: { onDownloaded: () => void }) {
             </text>
           </Show>
           <Show when={downloading()}>
-            <text style={{ color: theme.muted }}>ダウンロード中...</text>
+            <DownloadProgress value={progress()} />
           </Show>
           <Show when={fetching()}>
             <text style={{ color: theme.muted }}>作品情報を取得中...</text>

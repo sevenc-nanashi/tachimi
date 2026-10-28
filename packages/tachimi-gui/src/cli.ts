@@ -1,4 +1,6 @@
 import path from "node:path";
+import { createInterface } from "node:readline";
+import { Readable } from "node:stream";
 function getCliPath(): string {
   const cliPath = Bun.env.TACHIMI_CLI_PATH;
   if (!cliPath) {
@@ -7,7 +9,10 @@ function getCliPath(): string {
   return cliPath;
 }
 
-async function callCli(args: string[]): Promise<string> {
+async function callCli(
+  args: string[],
+  onProgress?: (progress: number) => void,
+): Promise<string> {
   const cliPath = getCliPath();
   const result = Bun.spawn([cliPath, ...args], {
     windowsHide: true,
@@ -17,7 +22,18 @@ async function callCli(args: string[]): Promise<string> {
   });
   const [exitCode, stdout, stderr] = await Promise.all([
     result.exited,
-    new Response(result.stdout).text(),
+    (async () => {
+      if (!onProgress) return new Response(result.stdout).text();
+      const lines = createInterface({
+        input: Readable.from(result.stdout),
+        crlfDelay: Infinity,
+      });
+      for await (const line of lines) {
+        const event = JSON.parse(line);
+        if (event.type === "progress") onProgress(event.progress);
+      }
+      return "";
+    })(),
     new Response(result.stderr).text(),
   ]);
   if (exitCode !== 0) {
@@ -106,12 +122,18 @@ export async function getTachieInfo(url: string): Promise<TachiePreview> {
   };
 }
 
-export async function downloadTachie(url: string): Promise<void> {
-  await downloadKey(tachieKey(url));
+export async function downloadTachie(
+  url: string,
+  onProgress?: (progress: number) => void,
+): Promise<void> {
+  await downloadKey(tachieKey(url), onProgress);
 }
 
-export async function downloadKey(key: string): Promise<void> {
-  await callCli(["download", "--key", key]);
+export async function downloadKey(
+  key: string,
+  onProgress?: (progress: number) => void,
+): Promise<void> {
+  await callCli(["download", "--key", key], onProgress);
 }
 
 export async function deleteTachie(key: string): Promise<void> {
