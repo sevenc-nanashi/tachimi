@@ -235,10 +235,10 @@ public sealed class TachimiView : UserControl
                         {
                             var button = Button(Path.GetRelativePath(tachie.dir, file), () =>
                             {
-                                Insert(file);
+                                Insert(file, tachie.parent_work);
                                 return Task.CompletedTask;
                             });
-                            button.ToolTip = "クリック：配置、Ctrl＋クリック：パスをコピー";
+                            button.ToolTip = "クリック：配置、Ctrl＋クリック：パスをコピー、Alt＋クリック：親作品IDをコピー";
                             button.SetBinding(IsEnabledProperty, nameof(TachimiModel.CanPlace));
                             files.Children.Add(button);
                         }
@@ -326,8 +326,15 @@ i++)
         }
 
     }
-    void Insert(string file)
+    void Insert(string file, ParentWork? parentWork)
     {
+        if ((Keyboard.Modifiers & ModifierKeys.Alt) != 0)
+        {
+            if (parentWork is null) throw new InvalidOperationException("親作品情報がありません。");
+            Clipboard.SetText(parentWork.id);
+            copiedText.Text = $"コピーしました: {parentWork.id}";
+            return;
+        }
         if ((Keyboard.Modifiers & ModifierKeys.Control) != 0)
         {
             Clipboard.SetText(file);

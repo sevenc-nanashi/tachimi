@@ -248,10 +248,21 @@ impl TachimiApp {
                 .expect("scanned path is under tachie directory");
             if ui
                 .button(relative.to_string_lossy())
-                .on_hover_text("クリック：配置、Ctrl+クリック：パスをコピー")
+                .on_hover_text(
+                    "クリック：配置、Ctrl+クリック：パスをコピー、Alt+クリック：親作品IDをコピー",
+                )
                 .clicked()
             {
-                if ui.input(|input| input.modifiers.ctrl) {
+                if ui.input(|input| input.modifiers.alt) {
+                    if let Some(parent) = &self.tachies[index].parent_work {
+                        ui.copy_text(parent.id.clone());
+                        self.copied_text = Some(parent.id.clone());
+                        self.error = None;
+                        ui.ctx().request_repaint();
+                    } else {
+                        self.error = Some("親作品情報がありません。".to_string());
+                    }
+                } else if ui.input(|input| input.modifiers.ctrl) {
                     let text = file.to_string_lossy().to_string();
                     ui.copy_text(text.clone());
                     self.copied_text = Some(text);
