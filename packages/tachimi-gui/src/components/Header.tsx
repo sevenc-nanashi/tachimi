@@ -4,6 +4,7 @@ import * as theme from "~/theme.ts";
 import AboutDialog from "./AboutDialog.tsx";
 import DownloadDialog from "./DownloadDialog.tsx";
 import IconButton from "./IconButton.tsx";
+import SettingsDialog from "./SettingsDialog.tsx";
 
 export default function Header(props: {
   onDownloaded: () => void;
@@ -13,7 +14,7 @@ export default function Header(props: {
   return (
     <div
       style={{
-        gap: 24,
+        gap: 8,
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
@@ -24,6 +25,7 @@ export default function Header(props: {
     >
       <AboutDialog />
       <div style={{ flexGrow: 1 }} />
+      <SettingsDialog onMoved={props.onDownloaded} />
       <Show
         when={props.hasParentWorks}
         fallback={<DownloadDialog onDownloaded={props.onDownloaded} />}

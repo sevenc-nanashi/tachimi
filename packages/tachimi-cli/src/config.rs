@@ -13,23 +13,23 @@ impl Default for Config {
 }
 
 pub fn load_config() -> anyhow::Result<Config> {
-    let config_path = tachimi_common::data_path();
-
-    if !config_path.exists() {
-        let default_config = Config::default();
-        std::fs::create_dir_all(
-            config_path
-                .parent()
-                .expect("Failed to get parent directory"),
-        )?;
-        serde_json::to_writer_pretty(
-            std::fs::File::create(&config_path).expect("Failed to create config file"),
-            &default_config,
-        )?;
-        return Ok(default_config);
+    let config_path = tachimi_common::data_dir().join("config.json");
+    match std::fs::File::open(config_path) {
+        Ok(file) => {
+            let mut config: Config = serde_json::from_reader(file)?;
+            config.tachie_dir = dunce::simplified(&config.tachie_dir).to_path_buf();
+            Ok(config)
+        }
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(Config::default()),
+        Err(error) => Err(error.into()),
     }
+}
 
-    let config_file = std::fs::File::open(&config_path).expect("Failed to open config file");
-    let config: Config = serde_json::from_reader(config_file).expect("Failed to parse config file");
-    Ok(config)
+pub fn save_config(config: &Config) -> anyhow::Result<()> {
+    let dir = tachimi_common::data_dir();
+    let mut file = tempfile::NamedTempFile::new_in(&dir)?;
+    serde_json::to_writer_pretty(file.as_file_mut(), config)?;
+    file.as_file().sync_all()?;
+    file.persist(dir.join("config.json"))?;
+    Ok(())
 }

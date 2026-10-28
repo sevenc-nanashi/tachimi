@@ -2,6 +2,7 @@ import { render } from "@gpuix/solid";
 import { createResource, createSignal } from "solid-js";
 import * as cli from "~/cli.ts";
 import * as actions from "~/actions.ts";
+import * as theme from "~/theme.ts";
 import Header from "./components/Header.tsx";
 import TachieList from "./components/TachieList.tsx";
 import { setWindowIcon } from "./windowIcon.ts";
@@ -36,6 +37,7 @@ function App() {
       style={{
         display: "flex",
         flexDirection: "column",
+        fontSize: theme.fontSize.md,
         height: "100%",
       }}
     >

@@ -118,6 +118,14 @@ export async function deleteTachie(key: string): Promise<void> {
   await callCli(["delete", "--key", key]);
 }
 
+export async function getConfig(): Promise<{ tachie_dir: string }> {
+  return JSON.parse(await callCli(["config"]));
+}
+
+export async function moveTachieDir(destination: string): Promise<void> {
+  await callCli(["move-tachie-dir", "--destination", destination]);
+}
+
 type Updates = { revisions: Record<string, number | null> };
 
 export async function shallowFetch(): Promise<Updates> {

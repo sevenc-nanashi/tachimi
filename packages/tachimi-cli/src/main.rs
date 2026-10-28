@@ -53,7 +53,7 @@ fn main() -> anyhow::Result<()> {
         )
         .init();
 
-    let data_lock = sync_data()?;
+    let _data_lock = sync_data()?;
 
     if std::env::args().len() == 1 {
         // コマンド未指定時はGUIを起動する
@@ -64,8 +64,12 @@ fn main() -> anyhow::Result<()> {
 
     let cli = cli::Greet::parse();
     let config = config::load_config()?;
-    drop(data_lock);
     match cli.command {
+        cli::Commands::Config => {
+            println!("{}", serde_json::to_string_pretty(&config)?);
+            Ok(())
+        }
+        cli::Commands::MoveTachieDir(args) => cli::move_tachie_dir::run(&config, &args),
         cli::Commands::Ui => run_gui(),
         cli::Commands::Version(version) => cli::version::run(&config, &version),
         cli::Commands::List(list) => cli::list::run(&config, &list),
