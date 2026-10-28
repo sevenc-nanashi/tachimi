@@ -9,6 +9,7 @@ export default defineConfig({
       outDir: "dist",
       ogImage: true,
       docs: false,
+      keyboardKeys: true,
       images: true,
       ssg: {
         siteName: "Tachimi",
