@@ -9,6 +9,8 @@ process.chdir(import.meta.dir + "/..");
 async function buildGui() {
   await $`bun run --cwd ./packages/tachimi-gui build`;
   await $`cargo build -r -p tachimi-cli`;
+
+  await mkdir("dist/tachimi-gui", { recursive: true });
   await copyFile(
     "./target/release/tachimi.exe",
     "./dist/tachimi-gui/tachimi.exe",
@@ -26,7 +28,6 @@ async function buildAviUtl2() {
     await Bun.file("packages/tachimi-aviutl2/aviutl2.toml").text(),
   ) as { project: { id: string; version: string } };
   const pluginArchive = `${project.id}-v${project.version}.au2pkg.zip`;
-  await mkdir("dist/tachimi-gui", { recursive: true });
   await $`au2 release`.cwd("./packages/tachimi-aviutl2");
   await copyFile(
     `./packages/tachimi-aviutl2/release/${pluginArchive}`,
@@ -50,6 +51,7 @@ async function buildYMM4() {
   await rename("dist/tachimi-ymm4.zip", `dist/tachimi-ymm4-v${version}.ymme`);
 }
 
+await mkdir("dist", { recursive: true });
 await buildGui();
 await buildAviUtl2();
 await buildYMM4();
