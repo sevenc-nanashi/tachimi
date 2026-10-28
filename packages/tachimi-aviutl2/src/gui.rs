@@ -125,7 +125,7 @@ impl TachimiApp {
                                             .copied()
                                             .flatten()
                                             .context("更新情報がありません")?;
-                                        Ok(if revision > tachie.idx {
+                                        Ok(if revision != tachie.idx {
                                             UpdateStatus::Available
                                         } else {
                                             UpdateStatus::Current
@@ -368,7 +368,7 @@ impl eframe::App for TachimiApp {
                                 .get(&tachie.key)
                                 .copied()
                                 .flatten()
-                                .is_some_and(|revision| revision > tachie.idx)
+                                .is_some_and(|revision| revision != tachie.idx)
                             {
                                 self.updates[index] = UpdateStatus::Available;
                             }

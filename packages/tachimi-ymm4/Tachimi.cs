@@ -269,7 +269,7 @@ public sealed class TachimiView : UserControl
             {
                 var shallow = await Cli.Run<Updates>(token, "shallow-fetch");
                 token.ThrowIfCancellationRequested();
-                foreach (var t in list) if (shallow.revisions.TryGetValue(t.key, out var revision) && revision > t.idx) labels[t.key].Text = $"{t.name} / {t.user}（更新あり）";
+                foreach (var t in list) if (shallow.revisions.TryGetValue(t.key, out var revision) && revision is not null && revision != t.idx) labels[t.key].Text = $"{t.name} / {t.user}（更新あり）";
             }
             catch (Exception ex) when (ex is not OperationCanceledException && !token.IsCancellationRequested)
             {
@@ -286,7 +286,7 @@ i++)
                 {
                     var update = await Cli.Run<Updates>(token, "fetch", "--key", t.key);
                     if (!update.revisions.TryGetValue(t.key, out var revision) || revision is null) throw new IOException("更新情報がありません。");
-                    result = revision > t.idx ? "（更新あり）" : "";
+                    result = revision != t.idx ? "（更新あり）" : "";
                 }
                 catch (Exception ex) when (ex is not OperationCanceledException && !token.IsCancellationRequested)
                 {

@@ -38,7 +38,7 @@ export default function TachieList(props: {
         const shallow = await cli.shallowFetch();
         for (const item of items) {
           const revision = shallow.revisions[item.key];
-          if (revision != null && revision > item.idx) {
+          if (revision != null && revision !== item.idx) {
             setStatus(item.key, "available");
           }
         }
@@ -54,7 +54,7 @@ export default function TachieList(props: {
           const result = await cli.fetchTachie(item.key);
           const revision = result.revisions[item.key];
           if (revision == null) throw new Error("更新情報がありません");
-          setStatus(item.key, revision > item.idx ? "available" : "current");
+          setStatus(item.key, revision !== item.idx ? "available" : "current");
         } catch {
           setStatus(item.key, "error");
         }

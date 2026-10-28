@@ -8,10 +8,10 @@ export const GET = defineHandler.withValidator({
   const keys = query.keys.split(",");
 
   const { results } = await env.DB.prepare(
-    `SELECT requested.value AS tachie_id, MAX(revision.idx) AS idx
+    `SELECT DISTINCT requested.value AS tachie_id, revision.idx AS idx
      FROM json_each(?1) AS requested
-     LEFT JOIN tachie_revisions AS revision ON revision.tachie_id = requested.value
-     GROUP BY requested.value`,
+     LEFT JOIN tachie_revisions AS revision
+       ON revision.tachie_id = requested.value AND revision.latest = 1`,
   )
     .bind(JSON.stringify(keys))
     .all<{ tachie_id: string; idx: number | null }>();

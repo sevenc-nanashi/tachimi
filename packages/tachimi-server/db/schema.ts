@@ -13,6 +13,7 @@ export const tachieRevisions = sqliteTable(
     tachieId: text("tachie_id").notNull(),
     sha: text("sha").notNull().notNull(),
     idx: integer("idx").notNull(),
+    latest: integer("latest", { mode: "boolean" }).notNull().default(false),
     createdAt: text("created_at")
       .default(sql`(datetime('now'))`)
       .notNull(),
@@ -23,5 +24,8 @@ export const tachieRevisions = sqliteTable(
       table.tachieId,
       table.sha,
     ),
+    uniqueIndex("tachie_revisions_latest_unique")
+      .on(table.tachieId)
+      .where(sql`${table.latest} = 1`),
   ],
 );

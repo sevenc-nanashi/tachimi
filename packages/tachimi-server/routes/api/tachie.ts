@@ -92,24 +92,28 @@ async function upsertRevisionIndex(
   tachieId: string,
   sha: string,
 ) {
-  return db
-    .prepare(
-      `
-        INSERT INTO tachie_revisions (tachie_id, sha, idx)
+  const results = await db.batch<{ idx: number; createdAt: number }>([
+    db
+      .prepare(
+        "UPDATE tachie_revisions SET latest = 0 WHERE tachie_id = ?1 AND latest = 1",
+      )
+      .bind(tachieId),
+    db
+      .prepare(
+        `
+        INSERT INTO tachie_revisions (tachie_id, sha, idx, latest)
         VALUES (
           ?1, ?2,
-          (SELECT COUNT(*) FROM tachie_revisions WHERE tachie_id = ?1)
+          (SELECT COUNT(*) FROM tachie_revisions WHERE tachie_id = ?1), 1
         )
         ON CONFLICT (tachie_id, sha) DO UPDATE
-        SET idx = tachie_revisions.idx
+        SET latest = 1
         RETURNING idx, unixepoch(created_at) as createdAt
       `,
-    )
-    .bind(tachieId, sha)
-    .first<{
-      idx: number;
-      createdAt: number;
-    }>();
+      )
+      .bind(tachieId, sha),
+  ]);
+  return results[1]!.results[0];
 }
 
 export const GET = defineHandler.withValidator({
@@ -117,7 +121,7 @@ export const GET = defineHandler.withValidator({
 })(async (_c, { query }) => {
   const tachieInfo = await getInfo(query.key);
   const revision = await upsertRevisionIndex(env.DB, query.key, tachieInfo.sha);
-  if (revision === null) {
+  if (revision === undefined) {
     throw new HTTPException(500, {
       message: "Revision upsert returned no row",
     });
