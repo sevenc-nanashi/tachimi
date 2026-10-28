@@ -11,16 +11,13 @@ async function buildGui() {
   await $`cargo build -r -p tachimi-cli`;
 
   await mkdir("dist/tachimi-gui", { recursive: true });
-  await copyFile(
-    "./target/release/tachimi.exe",
-    "./dist/tachimi-gui/tachimi.exe",
-  );
+  await copyFile("./target/release/tachimi.exe", "./dist/tachimi/tachimi.exe");
   await copyFile(
     "./packages/tachimi-gui/dist/tachimi-gui.exe",
-    "./dist/tachimi-gui/tachimi-gui.exe",
+    "./dist/tachimi/tachimi-gui.exe",
   );
 
-  await $`powershell.exe -NoProfile -NonInteractive -Command "Compress-Archive -LiteralPath dist/tachimi-gui -DestinationPath dist/tachimi-gui-${
+  await $`powershell.exe -NoProfile -NonInteractive -Command "Compress-Archive -LiteralPath dist/tachimi -DestinationPath dist/tachimi-gui-${
     version
   }.zip -Force -ErrorAction Stop"`;
 }
