@@ -156,7 +156,7 @@ public sealed class TachimiView : UserControl
         });
         tabs.Items.Add(new TabItem
         {
-            Header = "親作品",
+            Header = "親作品IDをコピー",
             Content = parentPanel
         });
         root.Children.Add(tabs);
@@ -275,9 +275,7 @@ public sealed class TachimiView : UserControl
             {
                 status.Text = ex.Message;
             }
-            for (int i = 0;
-i < list.Count;
-i++)
+            for (int i = 0; i < list.Count; i++)
             {
                 if (i > 0) await Task.Delay(1000, token);
                 var t = list[i];
@@ -353,10 +351,7 @@ i++)
     {
         var info = Model.Info ?? throw new InvalidOperationException("プロジェクトを開いてください。");
         var items = info.Scenes.AllScenes.SelectMany(s => s.Timeline.Items).ToArray();
-        var characters = items.OfType<VoiceItem>().Select(i => i.Character)
-            .Concat(items.OfType<TachieItem>().Select(i => i.Character))
-            .Concat(items.OfType<TachieFaceItem>().Select(i => i.Character))
-            .Distinct();
+        var characters = items.OfType<TachieItem>().Select(i => i.Character).Distinct();
         var paths = items.SelectMany(i => i.GetFiles())
             .Concat(characters.SelectMany(c => c.GetFiles()))
             .Select(path => Path.TrimEndingDirectorySeparator(Path.GetFullPath(path)))

@@ -170,7 +170,7 @@ impl TachimiApp {
         });
         ui.horizontal(|ui| {
             ui.selectable_value(&mut self.mode, Mode::Placement, "立ち絵を配置");
-            ui.selectable_value(&mut self.mode, Mode::ParentWorks, "親作品をコピー");
+            ui.selectable_value(&mut self.mode, Mode::ParentWorks, "親作品IDをコピー");
         });
     }
 

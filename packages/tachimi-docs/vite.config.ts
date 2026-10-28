@@ -9,6 +9,7 @@ export default defineConfig({
       outDir: "dist",
       ogImage: true,
       docs: false,
+      images: true,
       ssg: {
         siteName: "Tachimi",
         pagination: true,
@@ -26,6 +27,10 @@ export default defineConfig({
             {
               text: "インストール",
               link: "/install",
+            },
+            {
+              text: "使い方",
+              link: "/usage",
             },
           ],
         }),
